@@ -51,16 +51,16 @@ export const Input = ({
   };
 
   const baseInputStyles = twMerge(
-    `focus:outline-none text-l-blue`,
-    !!errorMessage ? '' : '',
+    `focus:outline-none text-l-blue border-[1px] rounded-lg`,
+    !!errorMessage ? 'border-c-orange ' : 'border-[#E1DFE1]',
     // type === 'number'
     //   ? 'appearance-textfield [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
     //   : '',
   );
 
   return (
-    <TextField aria-label={name} isInvalid={!!errorMessage} className={twMerge('space-y-2', containerClassName)}>
-      <div className="relative rounded-lg border-[1px] border-[#E1DFE1] focus:outline-none">
+    <TextField aria-label={name} isInvalid={!!errorMessage} className={containerClassName}>
+      <div className="relative">
         {isRequired && placeholder && localValue === '' && (
           <span className="text-l-blue pointer-events-none absolute top-1/2 left-4 z-10 -translate-y-1/2 transform text-sm">
             {placeholder} <span className="text-c-orange">*</span>
@@ -75,7 +75,7 @@ export const Input = ({
           className={twMerge(baseInputStyles, inputClassName)}
         />
       </div>
-      <FieldError className="text-md text-red-600">{errorMessage}</FieldError>
+      <FieldError className="text-c-orange px-1.5 text-[10px] font-light tracking-tight">{errorMessage}</FieldError>
     </TextField>
   );
 };

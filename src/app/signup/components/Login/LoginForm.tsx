@@ -5,16 +5,14 @@ import { RHFInput } from '@/components/common/Input/Input';
 import Button from '@/components/common/Button/Button';
 import { useState } from 'react';
 import EyeIcon from '../../../../../public/svgs/components/EyeIcon';
-
-interface LoginFormData {
-  emailOrUsername: string;
-  password: string;
-}
+import { zodResolver } from '@hookform/resolvers/zod';
+import { loginSchema, type LoginFormData } from '../../schema';
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const methods = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       emailOrUsername: '',
       password: '',

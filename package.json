@@ -9,13 +9,15 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
     "next": "15.5.3",
     "react": "19.1.0",
     "react-aria": "^3.43.2",
     "react-aria-components": "^1.12.2",
     "react-dom": "19.1.0",
     "react-hook-form": "^7.62.0",
-    "tailwind-merge": "^3.3.1"
+    "tailwind-merge": "^3.3.1",
+    "zod": "^4.1.9"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

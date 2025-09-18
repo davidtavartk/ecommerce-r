@@ -24,10 +24,10 @@ const LoginForm = () => {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      const response = await authService.login(data);
-      console.log('Login response:', response);
+      await authService.login(data);
+      // console.log('Login response:', response);
     } catch (err: any) {
-      console.log('Error', err);
+      // console.log('Error', err);
       if (err.data?.errors) {
         Object.keys(err.data.errors).forEach((field) => {
           methods.setError(field as keyof LoginFormData, {

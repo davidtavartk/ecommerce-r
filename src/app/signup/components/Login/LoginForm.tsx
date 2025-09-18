@@ -4,6 +4,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { RHFInput } from '@/components/common/Input/Input';
 import Button from '@/components/common/Button/Button';
 import { useState } from 'react';
+import EyeIcon from '../../../../../public/svgs/components/EyeIcon';
 
 interface LoginFormData {
   emailOrUsername: string;
@@ -24,7 +25,6 @@ const LoginForm = () => {
 
   const onSubmit = (data: LoginFormData) => {
     console.log('Login data:', data);
-    // TODO: Implement login API call
   };
 
   return (
@@ -50,6 +50,14 @@ const LoginForm = () => {
               isRequired
               inputClassName="w-full px-3.5  py-2 rounded-lg"
             />
+
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute top-1/2 right-3 -translate-y-1/2"
+            >
+              <EyeIcon isPasswordVisible={showPassword} />
+            </button>
           </div>
         </div>
 

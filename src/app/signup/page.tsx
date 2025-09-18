@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import LoginForm from './components/Login/LoginForm';
+import RegistrationForm from './components/Registration/RegistrationForm';
 
 export default function SignUp() {
   return (
@@ -18,7 +19,8 @@ export default function SignUp() {
         <div className="mx-auto w-[554px] flex flex-col gap-10">
           <h1 className="text-[42px] font-semibold">Log In</h1>
           <div className="flex flex-col gap-6">
-            <LoginForm />
+            {/* <LoginForm /> */}
+            <RegistrationForm />
             <div className="flex justify-center gap-2">
               <span className="text-l-blue text-sm">Not a member?</span>
               <button className="text-c-orange cursor-pointer font-medium text-sm hover:underline">Register</button>

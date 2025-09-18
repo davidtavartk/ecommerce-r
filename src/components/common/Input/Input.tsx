@@ -74,8 +74,10 @@ export const Input = ({
           placeholder={!isRequired ? placeholder : ''}
           className={twMerge(baseInputStyles, inputClassName)}
         />
+        <FieldError className="text-c-orange absolute top-full mt-0.5 left-0 px-1.5 text-[10px] font-light tracking-tight">
+          {errorMessage}
+        </FieldError>
       </div>
-      <FieldError className="text-c-orange px-1.5 text-[10px] font-light tracking-tight">{errorMessage}</FieldError>
     </TextField>
   );
 };

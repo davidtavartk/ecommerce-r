@@ -9,9 +9,12 @@ import Button from '@/components/common/Button/Button';
 import { RegistrationFormData, registrationSchema } from '../../schema';
 import { authService } from '@/services/authService';
 import { RHFAvatarInput } from '@/components/common/Input/AvatarInput';
+import { useAuthStore } from '@/store/authStore';
 
 const RegistrationForm = () => {
   const [showPassword, setShowPassword] = useState(false);
+
+  const { login } = useAuthStore();
 
   const methods = useForm<RegistrationFormData>({
     resolver: zodResolver(registrationSchema),
@@ -27,8 +30,10 @@ const RegistrationForm = () => {
   const { handleSubmit } = methods;
 
   const onSubmit = async (data: RegistrationFormData) => {
+    console.log('REGISTER DATA', data);
     try {
-      await authService.register(data);
+      const response = await authService.register(data);
+      // login(response.token, response.user);
     } catch (err: any) {
       if (err.data?.errors) {
         Object.keys(err.data.errors).forEach((field) => {

@@ -4,7 +4,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 }
 
 export interface CircleButtonProps {
-  photoSrc: string;
+  photoSrc?: string;
   size?: number;
   onClick?: () => void;
   children?: React.ReactNode;

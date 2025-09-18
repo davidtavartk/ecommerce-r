@@ -8,9 +8,15 @@ import EyeIcon from '../../../../../public/svgs/components/EyeIcon';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, type LoginFormData } from '../../schema';
 import { authService } from '@/services/authService';
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/store/authStore';
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
+
+  const { login } = useAuthStore();
+
+  const router = useRouter();
 
   const methods = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -24,8 +30,11 @@ const LoginForm = () => {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      await authService.login(data);
-      // console.log('Login response:', response);
+      const response = await authService.login(data);
+      login(response.token, response.user);
+      console.log('Login response:', response);
+
+      router.push('/');
     } catch (err: any) {
       // console.log('Error', err);
       if (err.data?.errors) {
@@ -44,12 +53,7 @@ const LoginForm = () => {
         <div className="flex flex-col gap-6">
           {/* Email */}
           <div>
-            <RHFInput
-              name="email"
-              placeholder="Email"
-              isRequired
-              inputClassName="w-full px-3.5  py-2 rounded-lg"
-            />
+            <RHFInput name="email" placeholder="Email" isRequired inputClassName="w-full px-3.5  py-2 rounded-lg" />
           </div>
 
           {/* Password */}

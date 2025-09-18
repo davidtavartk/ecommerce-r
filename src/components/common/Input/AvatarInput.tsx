@@ -5,10 +5,10 @@ import { Controller, useFormContext } from 'react-hook-form';
 import Image from 'next/image';
 import CircleButton from '../Button/CircleButton';
 
-type AvatarInputProps = {
+interface AvatarInputProps {
   name: string;
   size?: number;
-};
+}
 
 export const RHFAvatarInput = ({ name, size = 88 }: AvatarInputProps) => {
   const { control } = useFormContext();
@@ -21,9 +21,15 @@ export const RHFAvatarInput = ({ name, size = 88 }: AvatarInputProps) => {
       // Create preview URL
       const previewUrl = URL.createObjectURL(file);
       setPreview(previewUrl);
-    } else {
-      onChange(undefined);
-      setPreview(null);
+    }
+  };
+
+  const handleRemove = (onChange: (file: File | undefined) => void) => {
+    onChange(undefined);
+    setPreview(null);
+    // Clear the file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
     }
   };
 
@@ -35,13 +41,26 @@ export const RHFAvatarInput = ({ name, size = 88 }: AvatarInputProps) => {
     <Controller
       name={name}
       control={control}
-      render={({ field: { onChange, value } }) => (
-        <div className="flex cursor-pointer items-center gap-4" onClick={handleClick}>
-          <CircleButton photoSrc={preview || undefined} size={size}>
-            <Image src="/svgs/cameraIcon.svg" alt="upload" width={24} height={24} />
-          </CircleButton>
+      render={({ field: { onChange } }) => (
+        <div className='flex gap-5 items-center'>
+          <div className="flex cursor-pointer items-center gap-4" onClick={handleClick}>
+            <CircleButton photoSrc={preview || undefined} size={size}>
+              <Image src="/svgs/cameraIcon.svg" alt="upload" width={24} height={24} />
+            </CircleButton>
+            <span className="text-sm">Upload image</span>
+          </div>
 
-          <span className="text-sm">Upload image</span>
+          {preview && (
+            <span
+              className="cursor-pointer text-sm hover:underline"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleRemove(onChange);
+              }}
+            >
+              Remove
+            </span>
+          )}
 
           <input
             ref={fileInputRef}

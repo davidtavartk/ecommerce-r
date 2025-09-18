@@ -7,6 +7,7 @@ import { useState } from 'react';
 import EyeIcon from '../../../../../public/svgs/components/EyeIcon';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, type LoginFormData } from '../../schema';
+import { authService } from '@/services/authService';
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -14,15 +15,27 @@ const LoginForm = () => {
   const methods = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      emailOrUsername: '',
+      email: '',
       password: '',
     },
   });
 
   const { handleSubmit } = methods;
 
-  const onSubmit = (data: LoginFormData) => {
-    console.log('Login data:', data);
+  const onSubmit = async (data: LoginFormData) => {
+    try {
+      const response = await authService.login(data);
+      console.log('Login response:', response);
+    } catch (err: any) {
+      console.log('Error', err);
+      if (err.data?.errors) {
+        Object.keys(err.data.errors).forEach((field) => {
+          methods.setError(field as keyof LoginFormData, {
+            message: err.data.errors[field][0],
+          });
+        });
+      }
+    }
   };
 
   return (
@@ -32,7 +45,7 @@ const LoginForm = () => {
           {/* Email or Username */}
           <div>
             <RHFInput
-              name="emailOrUsername"
+              name="email"
               placeholder="Email or username"
               isRequired
               inputClassName="w-full px-3.5  py-2 rounded-lg"

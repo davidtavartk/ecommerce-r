@@ -7,6 +7,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import EyeIcon from '../../../../../public/svgs/components/EyeIcon';
 import Button from '@/components/common/Button/Button';
 import { RegistrationFormData, registrationSchema } from '../../schema';
+import { authService } from '@/services/authService';
 
 const RegistrationForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -14,18 +15,30 @@ const RegistrationForm = () => {
   const methods = useForm<RegistrationFormData>({
     resolver: zodResolver(registrationSchema),
     defaultValues: {
+      avatar: undefined,
       username: '',
       email: '',
       password: '',
-      confirmPassword: '',
+      password_confirmation: '',
     },
   });
 
   const { handleSubmit } = methods;
 
-  const onSubmit = (data: RegistrationFormData) => {
-    console.log('Registration data:', data);
+  const onSubmit = async (data: RegistrationFormData) => {
+    try {
+      await authService.register(data);
+    } catch (err: any) {
+      if (err.data?.errors) {
+        Object.keys(err.data.errors).forEach((field) => {
+          methods.setError(field as keyof RegistrationFormData, {
+            message: err.data.errors[field][0],
+          });
+        });
+      }
+    }
   };
+
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-12">
@@ -62,9 +75,9 @@ const RegistrationForm = () => {
           {/* Confirm Password */}
           <div className="relative">
             <RHFInput
-              name="confirmPassword"
+              name="password_confirmation"
               type={showPassword ? 'text' : 'password'}
-              placeholder="Password"
+              placeholder="Confirm Password"
               isRequired
               inputClassName="w-full px-3.5  py-2 rounded-lg"
             />

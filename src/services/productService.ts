@@ -5,4 +5,9 @@ export const productService = {
     apiRequest('/products', {
       method: 'GET',
     }),
+
+  getProductById: (id: number) =>
+    apiRequest(`/products/${id}`, {
+      method: 'GET',
+    }),
 };

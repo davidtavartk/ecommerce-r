@@ -42,11 +42,11 @@ const LoginForm = () => {
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-12">
         <div className="flex flex-col gap-6">
-          {/* Email or Username */}
+          {/* Email */}
           <div>
             <RHFInput
               name="email"
-              placeholder="Email or username"
+              placeholder="Email"
               isRequired
               inputClassName="w-full px-3.5  py-2 rounded-lg"
             />

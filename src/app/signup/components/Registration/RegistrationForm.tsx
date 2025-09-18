@@ -1,13 +1,14 @@
 'use client';
 
+import { useState } from 'react';
 import { RHFInput } from '@/components/common/Input/Input';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import EyeIcon from '../../../../../public/svgs/components/EyeIcon';
 import Button from '@/components/common/Button/Button';
 import { RegistrationFormData, registrationSchema } from '../../schema';
 import { authService } from '@/services/authService';
+import { RHFAvatarInput } from '@/components/common/Input/AvatarInput';
 
 const RegistrationForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -42,6 +43,11 @@ const RegistrationForm = () => {
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-12">
+        {/* Avatar */}
+        <div className="flex">
+          <RHFAvatarInput name="avatar" size={100} />
+        </div>
+
         <div className="flex flex-col gap-6">
           {/* Username */}
           <div>

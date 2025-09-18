@@ -10,6 +10,7 @@ type InternalInputProps = {
   containerClassName?: string;
   inputClassName?: string;
   debounceMs?: number;
+  isRequired?: boolean;
 } & InputProps;
 
 // Reusable component that can be used when we don't need to use react-hook-form
@@ -23,6 +24,7 @@ export const Input = ({
   inputClassName = '',
   debounceMs = 0,
   type = 'text',
+  isRequired = false,
 }: InternalInputProps) => {
   const [localValue, setLocalValue] = useState(value ?? '');
   const debouncedValue = useDebounce(localValue, debounceMs ?? 0);
@@ -49,22 +51,27 @@ export const Input = ({
   };
 
   const baseInputStyles = twMerge(
-    ``,
+    `focus:outline-none text-l-blue`,
     !!errorMessage ? '' : '',
-    type === 'number'
-      ? 'appearance-textfield [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
-      : '',
+    // type === 'number'
+    //   ? 'appearance-textfield [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
+    //   : '',
   );
 
   return (
     <TextField aria-label={name} isInvalid={!!errorMessage} className={twMerge('space-y-2', containerClassName)}>
-      <div className="relative">
+      <div className="relative rounded-lg border-[1px] border-[#E1DFE1] focus:outline-none">
+        {isRequired && placeholder && localValue === '' && (
+          <span className="text-l-blue pointer-events-none absolute top-1/2 left-4 z-10 -translate-y-1/2 transform text-sm">
+            {placeholder} <span className="text-c-orange">*</span>
+          </span>
+        )}
         <AriaInput
           type={type}
           value={localValue}
           onChange={handleChange}
           aria-label={name}
-          placeholder={placeholder}
+          placeholder={!isRequired ? placeholder : ''}
           className={twMerge(baseInputStyles, inputClassName)}
         />
       </div>

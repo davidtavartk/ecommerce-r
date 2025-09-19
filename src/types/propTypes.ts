@@ -15,4 +15,6 @@ export interface FiltrationProps {
   from?: number;
   to?: number;
   total?: number;
+  onApplyFilter?: (priceFrom: string, priceTo: string) => void;
+
 }

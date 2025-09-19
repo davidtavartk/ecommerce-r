@@ -11,6 +11,7 @@ type InternalInputProps = {
   inputClassName?: string;
   debounceMs?: number;
   isRequired?: boolean;
+  onInput?: (e: React.FormEvent<HTMLInputElement>) => void;
 } & InputProps;
 
 // Reusable component that can be used when we don't need to use react-hook-form
@@ -20,6 +21,7 @@ export const Input = ({
   errorMessage,
   value,
   onChange,
+  onInput,
   containerClassName = '',
   inputClassName = '',
   debounceMs = 0,
@@ -70,11 +72,12 @@ export const Input = ({
           type={type}
           value={localValue}
           onChange={handleChange}
+          onInput={onInput}
           aria-label={name}
           placeholder={!isRequired ? placeholder : ''}
           className={twMerge(baseInputStyles, inputClassName)}
         />
-        <FieldError className="text-c-orange absolute top-full mt-0.5 left-0 px-1.5 text-[10px] font-light tracking-tight">
+        <FieldError className="text-c-orange absolute top-full left-0 mt-0.5 px-1.5 text-[10px] font-light tracking-tight">
           {errorMessage}
         </FieldError>
       </div>

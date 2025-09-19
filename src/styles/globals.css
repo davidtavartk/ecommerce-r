@@ -5,9 +5,20 @@
   --color-d-blue: #10151F;
   --color-l-blue: #3E424A;
   --color-c-orange: #FF4000;
-
+  --color-l-gray: #E1DFE1;
 }
 
+@layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+}
 
 @font-face {
   font-family: "Poppins";

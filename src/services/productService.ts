@@ -1,7 +1,7 @@
 import { apiRequest } from './apiClient';
 
 export const productService = {
-  getProducts: () =>
+  getAllProducts: () =>
     apiRequest('/products', {
       method: 'GET',
     }),

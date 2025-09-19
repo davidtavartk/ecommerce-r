@@ -18,3 +18,12 @@ export interface AuthState {
   logout: () => void;
   initializeAuth: () => void;
 }
+
+
+export interface Product {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
+}
+

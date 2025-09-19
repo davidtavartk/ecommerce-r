@@ -1,20 +1,37 @@
 'use client';
 
+import ProductHeader from '@/components/Product/ProductHeader/ProductHeader';
 import { productService } from '@/services/productService';
+import { useEffect, useState } from 'react';
+import ProductCard from '@/components/Product/ProductCard/ProductCard';
 
 export default function Home() {
-  const handleClick = async () => {
-    try {
-      const response = await productService.getProductById(2);
+  const [products, setProducts] = useState([]);
 
-      console.log(response);
+  const fetchProducts = async () => {
+    try {
+      const response = await productService.getAllProducts();
+      console.log('Products response:', response);
+      setProducts(response.data);
     } catch (error) {
       console.error('Error fetching products:', error);
     }
   };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
   return (
-    <div className="bg-amber-600" onClick={handleClick}>
-      Click me to fetch products
+    <div className="mx-auto flex min-h-screen flex-col gap-8 px-[100px]">
+      <ProductHeader />
+      <main className="grid grid-cols-4 gap-6">
+        {products.length > 0 ? (
+          products.map((product) => <ProductCard key={product.id} product={product} />)
+        ) : (
+          <p>Loading products...</p>
+        )}
+      </main>
     </div>
   );
 }

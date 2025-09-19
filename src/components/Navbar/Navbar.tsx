@@ -18,7 +18,7 @@ const Navbar = () => {
     <nav className="h-[80px]">
       <div className="mx-auto flex h-full items-center justify-between px-[100px]">
         <div className="flex cursor-pointer items-center gap-1" onClick={() => router.push('/')}>
-          <Image src="/images/logo.png" alt="Logo" width={24} height={24} />
+          <Image src="/images/logo.png" alt="Logo" width={24} height={24} priority/>
           <span className="font-semibold">RedSeam Clothing</span>
         </div>
 

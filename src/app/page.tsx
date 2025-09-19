@@ -15,6 +15,7 @@ export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [meta, setMeta] = useState<any>(null);
 
   const fetchProducts = async (page: number) => {
     try {
@@ -23,6 +24,7 @@ export default function Home() {
       setProducts(response.data);
       setCurrentPage(response.meta.current_page);
       setTotalPages(response.meta.last_page);
+      setMeta(response.meta);
 
       router.push(`/?page=${page}`, { scroll: false });
     } catch (error) {
@@ -37,7 +39,7 @@ export default function Home() {
 
   return (
     <div className="mx-auto mt-[72px] flex min-h-screen flex-col gap-8 px-[100px] py-32">
-      <ProductHeader />
+      <ProductHeader from={meta?.from} to={meta?.to} total={meta?.total} />
       <main className="grid grid-cols-4 gap-6">
         {products.length > 0 ? (
           products.map((product) => <ProductCard key={product.id} product={product} />)

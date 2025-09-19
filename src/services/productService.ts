@@ -2,8 +2,8 @@ import { PaginatedResponse, Product } from '@/types/types';
 import { apiRequest } from './apiClient';
 
 export const productService = {
-  getAllProducts: () =>
-    apiRequest<PaginatedResponse<Product>>('/products', {
+  getAllProducts: (page: number) =>
+    apiRequest<PaginatedResponse<Product>>(`/products?page=${page}`, {
       method: 'GET',
     }),
 

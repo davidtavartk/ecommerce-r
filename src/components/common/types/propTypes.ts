@@ -9,3 +9,9 @@ export interface CircleButtonProps {
   onClick?: () => void;
   children?: React.ReactNode;
 }
+
+export interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}

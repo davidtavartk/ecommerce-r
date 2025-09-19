@@ -1,6 +1,5 @@
+import { API_URL } from '@/constants/url';
 import { getCookie } from '@/utils/browser';
-
-const API_URL = 'https://api.redseam.redberryinternship.ge/api';
 
 export async function apiRequest<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const token = getCookie('accessToken');

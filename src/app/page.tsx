@@ -4,9 +4,10 @@ import ProductHeader from '@/components/Product/ProductHeader/ProductHeader';
 import { productService } from '@/services/productService';
 import { useEffect, useState } from 'react';
 import ProductCard from '@/components/Product/ProductCard/ProductCard';
+import { Product } from '@/types/types';
 
 export default function Home() {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<Product[]>([]);
 
   const fetchProducts = async () => {
     try {

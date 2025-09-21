@@ -7,10 +7,14 @@ import ProductCard from '@/components/Product/ProductCard/ProductCard';
 import { Product } from '@/types/types';
 import Pagination from '@/components/common/Pagination/Pagination';
 import { useRouter, useSearchParams } from 'next/navigation';
+import ProductCardSkeleton from '@/components/Product/ProductCard/ProductCardSkeleton';
 
 export default function Home() {
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const [products, setProducts] = useState<Product[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,6 +27,9 @@ export default function Home() {
   });
 
   const fetchProducts = async (page: number, filterParams = filters) => {
+    setLoading(true);
+    setError(null);
+
     try {
       const params = new URLSearchParams({
         page: page.toString(),
@@ -41,7 +48,18 @@ export default function Home() {
 
       router.push(`/?${params.toString()}`, { scroll: false });
     } catch (error) {
-      console.error('Error fetching products:', error);
+      const errorWithStatus = error as { status?: number };
+      if (errorWithStatus.status === 404) {
+        setError('No products found');
+      } else if (errorWithStatus.status && errorWithStatus.status >= 500) {
+        setError('Server error. Please try again later.');
+      } else if (!navigator.onLine) {
+        setError('No internet connection. Please check your network.');
+      } else {
+        setError('Failed to load products. Please try again.');
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -65,14 +83,12 @@ export default function Home() {
     const newFilters = { ...filters, priceFrom, priceTo };
     setFilters(newFilters);
     fetchProducts(currentPage, newFilters);
-    console.log('Applied filters:', priceFrom, priceTo);
   };
 
   const handleSortChange = (sortType: string) => {
     const newFilters = { ...filters, sortBy: sortType };
     setFilters(newFilters);
     fetchProducts(currentPage, newFilters);
-    console.log('Selected sort type:', sortType);
   };
 
   return (
@@ -86,10 +102,25 @@ export default function Home() {
         onSortChange={handleSortChange}
       />
       <main className="grid grid-cols-4 gap-6">
-        {products.length > 0 ? (
+        {loading && products.length === 0 ? (
+          // Show 8 skeleton cards while loading
+          Array.from({ length: 8 }).map((_, index) => <ProductCardSkeleton key={index} />)
+        ) : error && products.length === 0 ? (
+          <div className="col-span-4 flex flex-col items-center gap-4 py-20">
+            <p className="text-c-orange">{error}</p>
+            <button
+              onClick={() => fetchProducts(currentPage)}
+              className="bg-c-orange rounded-lg px-4 py-2 text-white hover:opacity-90"
+            >
+              Try Again
+            </button>
+          </div>
+        ) : products.length > 0 ? (
           products.map((product) => <ProductCard key={product.id} product={product} />)
         ) : (
-          <p>Loading products...</p>
+          <div className="col-span-4 flex justify-center py-20">
+            <p className="text-l-blue">No products found</p>
+          </div>
         )}
       </main>
       <div className="flex items-center justify-center">

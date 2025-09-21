@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { Popover, Button as AriaButton, DialogTrigger } from 'react-aria-components';
-import { Input } from '@/components/common/Input/Input';
+import { RHFInput } from '@/components/common/Input/Input';
 import Button from '@/components/common/Button/Button';
 import Image from 'next/image';
+import { FilterFormData, filterSchema } from './schema';
+import { FormProvider, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 interface FilterDropdownProps {
   onApplyFilter: (priceFrom: string, priceTo: string) => void;
@@ -10,13 +13,16 @@ interface FilterDropdownProps {
 
 const FilterDropdown = ({ onApplyFilter }: FilterDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [priceFrom, setPriceFrom] = useState('');
-  const [priceTo, setPriceTo] = useState('');
 
-  const handleApply = () => {
-    onApplyFilter(priceFrom, priceTo);
-    setIsOpen(false);
-  };
+  const methods = useForm<FilterFormData>({
+    resolver: zodResolver(filterSchema),
+    defaultValues: {
+      priceFrom: '',
+      priceTo: '',
+    },
+  });
+
+  const { handleSubmit } = methods;
 
   const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
@@ -28,6 +34,11 @@ const FilterDropdown = ({ onApplyFilter }: FilterDropdownProps) => {
 
     // Remove any non-digit characters
     target.value = target.value.replace(/[^0-9]/g, '');
+  };
+
+  const onSubmit = (data: FilterFormData) => {
+    onApplyFilter(data.priceFrom, data.priceTo);
+    setIsOpen(false);
   };
 
   return (
@@ -44,45 +55,45 @@ const FilterDropdown = ({ onApplyFilter }: FilterDropdownProps) => {
         placement="bottom end"
         crossOffset={16}
       >
-        <div className="flex flex-col gap-5">
-          <h3 className="font-semibold">Select price</h3>
+        <FormProvider {...methods}>
+          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+            <h3 className="font-semibold">Select price</h3>
 
-          <div className="flex flex-col gap-2.5">
-            <div className="flex gap-2.5">
-              <div className="flex-1">
-                <Input
-                  name="priceFrom"
-                  placeholder="From"
-                  value={priceFrom}
-                  onChange={(e) => setPriceFrom(e.target.value)}
-                  onInput={handleInput}
-                  isRequired
-                  inputClassName="w-full px-3.5 py-2.5 rounded-lg"
-                  type="number"
-                />
+            <div className="flex flex-col gap-2.5">
+              <div className="flex gap-2.5">
+                <div className="flex-1">
+                  <RHFInput
+                    name="priceFrom"
+                    placeholder="From"
+                    type="number"
+                    // value={priceFrom}
+                    onInput={handleInput}
+                    isRequired
+                    inputClassName="w-full px-3.5 py-2.5 rounded-lg"
+                  />
+                </div>
+
+                <div className="flex-1">
+                  <RHFInput
+                    name="priceTo"
+                    placeholder="To"
+                    type="number"
+                    // value={priceTo}
+                    onInput={handleInput}
+                    isRequired
+                    inputClassName="w-full px-3.5 py-2.5 rounded-lg"
+                  />
+                </div>
               </div>
 
-              <div className="flex-1">
-                <Input
-                  name="priceTo"
-                  placeholder="To"
-                  value={priceTo}
-                  onChange={(e) => setPriceTo(e.target.value)}
-                  onInput={handleInput}
-                  isRequired
-                  inputClassName="w-full px-3.5 py-2.5 rounded-lg"
-                  type="number"
-                />
+              <div className="flex justify-end">
+                <Button type="submit" className="w-[124px] px-5 py-2.5">
+                  Apply
+                </Button>
               </div>
             </div>
-
-            <div className="flex justify-end">
-              <Button onClick={handleApply} className="w-[124px] px-5 py-2.5">
-                Apply
-              </Button>
-            </div>
-          </div>
-        </div>
+          </form>
+        </FormProvider>
       </Popover>
     </DialogTrigger>
   );

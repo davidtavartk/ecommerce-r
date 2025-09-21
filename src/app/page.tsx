@@ -16,17 +16,29 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [meta, setMeta] = useState<any>(null);
+  const [filters, setFilters] = useState({
+    priceFrom: '',
+    priceTo: '',
+    sortBy: '',
+  });
 
-  const fetchProducts = async (page: number) => {
+  const fetchProducts = async (page: number, filterParams = filters) => {
     try {
-      const response = await productService.getAllProducts(page);
-      console.log('Products response:', response);
+      const params = new URLSearchParams({
+        page: page.toString(),
+        ...(filterParams.priceFrom && { price_from: filterParams.priceFrom }),
+        ...(filterParams.priceTo && { price_to: filterParams.priceTo }),
+        ...(filterParams.sortBy && { sort: filterParams.sortBy }),
+      });
+
+      const response = await productService.getAllProducts(params.toString());
+
       setProducts(response.data);
       setCurrentPage(response.meta.current_page);
       setTotalPages(response.meta.last_page);
       setMeta(response.meta);
 
-      router.push(`/?page=${page}`, { scroll: false });
+      router.push(`/?${params.toString()}`, { scroll: false });
     } catch (error) {
       console.error('Error fetching products:', error);
     }
@@ -38,11 +50,17 @@ export default function Home() {
   }, []);
 
   const handleFilterApply = (priceFrom: string, priceTo: string) => {
-    console.log('Filter applied:', { priceFrom, priceTo });
+    const newFilters = { ...filters, priceFrom, priceTo };
+    setFilters(newFilters);
+    fetchProducts(currentPage, newFilters);
+    console.log('Applied filters:', priceFrom, priceTo);
   };
 
   const handleSortChange = (sortType: string) => {
-    console.log('Sort changed:', sortType);
+    const newFilters = { ...filters, sortBy: sortType };
+    setFilters(newFilters);
+    fetchProducts(currentPage, newFilters);
+    console.log('Selected sort type:', sortType);
   };
 
   return (

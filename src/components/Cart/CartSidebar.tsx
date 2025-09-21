@@ -30,7 +30,7 @@ const CartSidebar = () => {
   return (
     <>
       {/* Backdrop with blur effect */}
-      {/* <div className="bg-opacity-30 fixed inset-0 z-40 bg-gray-200 backdrop-blur-sm" onClick={toggleCart} /> */}
+      <div className="bg-opacity-30 fixed inset-0 z-40 bg-gray-900/30" onClick={toggleCart} />
 
       {/* Sidebar */}
       <div className="border-l-gray fixed top-0 right-0 z-50 flex h-full w-[540px] flex-col border bg-white p-10">
@@ -50,11 +50,9 @@ const CartSidebar = () => {
               <h2 className="text-2xl font-semibold">Ooops!</h2>
               <p className="text-sm">You’ve got nothing in your cart just yet...</p>
             </div>
-            <Link href="/" className="mt-[58px]">
-              <Button className="w-[214px] py-2.5" onClick={toggleCart}>
-                Continue Shopping
-              </Button>
-            </Link>
+            <Button className="mt-[58px] w-[214px] py-2.5" onClick={toggleCart}>
+              Continue Shopping
+            </Button>
           </div>
         ) : (
           <div>Non Empty Cart Content</div>

@@ -14,6 +14,7 @@ export interface AuthResponse {
 export interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
+  isLoading: boolean;
   login: (token: string, userData: User) => void;
   logout: () => void;
   initializeAuth: () => void;

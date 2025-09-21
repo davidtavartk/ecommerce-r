@@ -1,12 +1,31 @@
-"use client"
+'use client';
 
 import Image from 'next/image';
 import LoginForm from './components/Login/LoginForm';
 import RegistrationForm from './components/Registration/RegistrationForm';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/store/authStore';
 
 export default function SignUp() {
   const [isLogin, setIsLogin] = useState(true);
+  const router = useRouter();
+  const { isAuthenticated, isLoading } = useAuthStore();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/');
+    }
+  }, [isAuthenticated, router]);
+
+  if (isLoading) {
+    return null; // or a loading spinner
+  }
+
+  if (isAuthenticated) {
+    return null;
+  }
+
   return (
     <div className="flex h-screen">
       <div className="flex-1">
@@ -36,7 +55,6 @@ export default function SignUp() {
           </div>
         </div>
       </div>
-      
     </div>
   );
 }

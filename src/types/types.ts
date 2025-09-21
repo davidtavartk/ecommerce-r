@@ -19,12 +19,20 @@ export interface AuthState {
   initializeAuth: () => void;
 }
 
-
 export interface Product {
   id: number;
   name: string;
+  description: string;
   price: number;
   cover_image: string;
+  images: string[];
+  available_colors: string[];
+  available_sizes: string[];
+  brand: {
+    id: number;
+    name: string;
+    image: string;
+  };
 }
 
 export interface PaginatedResponse<T> {

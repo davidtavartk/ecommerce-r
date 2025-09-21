@@ -7,7 +7,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/products/${product.id}`);
+    router.push(`/product/${product.id}`);
   };
 
   return (

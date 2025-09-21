@@ -1,16 +1,17 @@
 import { sortOptions } from '@/constants/consts';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button as AriaButton, Popover } from 'react-aria-components';
 import { DialogTrigger } from 'react-aria-components';
 
 interface SortDropdownProps {
   onSortChange: (sortType: string) => void;
+  currentSort?: string;
 }
 
-const SortDropdown = ({ onSortChange }: SortDropdownProps) => {
+const SortDropdown = ({ onSortChange, currentSort }: SortDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedSort, setSelectedSort] = useState('');
+  const [selectedSort, setSelectedSort] = useState<string>(currentSort || '');
 
   const handleSortSelect = (sortType: string) => {
     setSelectedSort(sortType);
@@ -18,10 +19,19 @@ const SortDropdown = ({ onSortChange }: SortDropdownProps) => {
     onSortChange(sortType);
   };
 
+  const getSelectedLabel = () => {
+    const option = sortOptions.find((opt) => opt.key === selectedSort);
+    return option ? option.label : 'Sort By';
+  };
+
+  useEffect(() => {
+    setSelectedSort(currentSort || '');
+  }, [currentSort]);
+
   return (
     <DialogTrigger>
       <AriaButton className="flex cursor-pointer items-center gap-1" onPress={() => setIsOpen(!isOpen)}>
-        <span>{selectedSort || 'Sort By'}</span>
+        <span>{getSelectedLabel()}</span>
         <Image src="/svgs/arrow-left.svg" alt="dropdown arrow" width={20} height={20} className="rotate-270" />
       </AriaButton>
 

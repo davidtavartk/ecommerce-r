@@ -26,10 +26,11 @@ export default function Home() {
     try {
       const params = new URLSearchParams({
         page: page.toString(),
-        ...(filterParams.priceFrom && { price_from: filterParams.priceFrom }),
-        ...(filterParams.priceTo && { price_to: filterParams.priceTo }),
-        ...(filterParams.sortBy && { sort: filterParams.sortBy }),
       });
+
+      if (filterParams.priceFrom) params.append('filter[price_from]', filterParams.priceFrom);
+      if (filterParams.priceTo) params.append('filter[price_to]', filterParams.priceTo);
+      if (filterParams.sortBy) params.append('sort', filterParams.sortBy);
 
       const response = await productService.getAllProducts(params.toString());
 
@@ -46,7 +47,18 @@ export default function Home() {
 
   useEffect(() => {
     const pageFromUrl = parseInt(searchParams.get('page') || '1');
-    fetchProducts(pageFromUrl);
+    const priceFromUrl = searchParams.get('filter[price_from]') || '';
+    const priceToUrl = searchParams.get('filter[price_to]') || '';
+    const sortFromUrl = searchParams.get('sort') || '';
+
+    const urlFilters = {
+      priceFrom: priceFromUrl,
+      priceTo: priceToUrl,
+      sortBy: sortFromUrl,
+    };
+
+    setFilters(urlFilters);
+    fetchProducts(pageFromUrl, urlFilters);
   }, []);
 
   const handleFilterApply = (priceFrom: string, priceTo: string) => {
@@ -69,6 +81,7 @@ export default function Home() {
         from={meta?.from}
         to={meta?.to}
         total={meta?.total}
+        currentSort={filters.sortBy}
         onApplyFilter={handleFilterApply}
         onSortChange={handleSortChange}
       />

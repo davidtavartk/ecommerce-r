@@ -66,7 +66,6 @@ const FilterDropdown = ({ onApplyFilter }: FilterDropdownProps) => {
                     name="priceFrom"
                     placeholder="From"
                     type="number"
-                    // value={priceFrom}
                     onInput={handleInput}
                     isRequired
                     inputClassName="w-full px-3.5 py-2.5 rounded-lg"
@@ -78,7 +77,6 @@ const FilterDropdown = ({ onApplyFilter }: FilterDropdownProps) => {
                     name="priceTo"
                     placeholder="To"
                     type="number"
-                    // value={priceTo}
                     onInput={handleInput}
                     isRequired
                     inputClassName="w-full px-3.5 py-2.5 rounded-lg"
@@ -87,7 +85,7 @@ const FilterDropdown = ({ onApplyFilter }: FilterDropdownProps) => {
               </div>
 
               <div className="flex justify-end">
-                <Button type="submit" className="w-[124px] px-5 py-2.5">
+                <Button type="submit" className="w-[124px] px-5 py-2.5 mt-2.5">
                   Apply
                 </Button>
               </div>

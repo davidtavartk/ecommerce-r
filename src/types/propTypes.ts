@@ -9,6 +9,7 @@ export interface ProductHeaderProps {
   from?: number;
   to?: number;
   total?: number;
+  currentSort?: string;
   onApplyFilter?: (priceFrom: string, priceTo: string) => void;
   onSortChange?: (sortType: string) => void;
 }
@@ -19,4 +20,5 @@ export interface FiltrationProps {
   total?: number;
   onApplyFilter?: (priceFrom: string, priceTo: string) => void;
   onSortChange?: (sortType: string) => void;
+  currentSort?: string;
 }

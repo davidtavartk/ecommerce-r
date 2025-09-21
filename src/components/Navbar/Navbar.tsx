@@ -2,13 +2,11 @@
 
 import { useAuthStore } from '@/store/authStore';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import CircleButton from '../common/Button/CircleButton';
 import Link from 'next/link';
 
 const Navbar = () => {
-  const router = useRouter();
   const { user, isAuthenticated, logout, initializeAuth } = useAuthStore();
 
   useEffect(() => {

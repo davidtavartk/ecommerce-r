@@ -9,6 +9,7 @@ import Pagination from '@/components/common/Pagination/Pagination';
 import { useRouter, useSearchParams } from 'next/navigation';
 import ProductCardSkeleton from '@/components/Product/ProductCard/ProductCardSkeleton';
 
+
 export default function Home() {
   const router = useRouter();
   const searchParams = useSearchParams();

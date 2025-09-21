@@ -5,17 +5,27 @@ export const filterSchema = z
     priceFrom: z.string().min(1, 'Price from is required'),
     priceTo: z.string().min(1, 'Price to is required'),
   })
-  .refine(
-    (data) => {
-      const from = parseInt(data.priceFrom);
-      const to = parseInt(data.priceTo);
+  .superRefine((data, ctx) => {
+  const from = parseInt(data.priceFrom);
+  const to = parseInt(data.priceTo);
 
-      return from > 0 && to > 0 && from < to;
-    },
-    {
-      message: "Price 'from' must be less than 'to' and both must be positive",
-      path: ['priceTo'], // Show error on the 'to' field
-    },
-  );
+  if (!(from > 0 && to > 0 && from < to)) {
+    const message = "Price 'from' must be less than 'to' and both must be positive";
+    
+    // Add error to priceFrom (where message displays)
+    ctx.addIssue({
+      code: 'custom',
+      message,
+      path: ['priceFrom'],
+    });
+    
+    // Add error to priceTo (for red border only) with a special marker
+    ctx.addIssue({
+      code: 'custom',
+      message: '__NO_DISPLAY__', // Special marker for no display
+      path: ['priceTo'],
+    });
+  }
+});
 
 export type FilterFormData = z.infer<typeof filterSchema>;

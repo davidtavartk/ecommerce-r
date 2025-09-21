@@ -77,9 +77,11 @@ export const Input = ({
           placeholder={!isRequired ? placeholder : ''}
           className={twMerge(baseInputStyles, inputClassName)}
         />
-        <FieldError className="text-c-orange absolute top-full left-0 mt-0.5 px-1.5 text-[10px] font-light tracking-tight">
-          {errorMessage}
-        </FieldError>
+        {errorMessage && errorMessage.trim() && errorMessage !== '__NO_DISPLAY__' && (
+          <FieldError className="text-c-orange absolute top-full left-0 mt-0.5 px-1.5 text-[10px] font-light tracking-tight">
+            {errorMessage}
+          </FieldError>
+        )}
       </div>
     </TextField>
   );

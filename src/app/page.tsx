@@ -37,9 +37,23 @@ export default function Home() {
     fetchProducts(pageFromUrl);
   }, []);
 
+  const handleFilterApply = (priceFrom: string, priceTo: string) => {
+    console.log('Filter applied:', { priceFrom, priceTo });
+  };
+
+  const handleSortChange = (sortType: string) => {
+    console.log('Sort changed:', sortType);
+  };
+
   return (
     <div className="mx-auto mt-[72px] flex min-h-screen flex-col gap-8 px-[100px] py-32">
-      <ProductHeader from={meta?.from} to={meta?.to} total={meta?.total} />
+      <ProductHeader
+        from={meta?.from}
+        to={meta?.to}
+        total={meta?.total}
+        onApplyFilter={handleFilterApply}
+        onSortChange={handleSortChange}
+      />
       <main className="grid grid-cols-4 gap-6">
         {products.length > 0 ? (
           products.map((product) => <ProductCard key={product.id} product={product} />)

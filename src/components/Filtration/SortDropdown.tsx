@@ -21,7 +21,7 @@ const SortDropdown = ({ onSortChange }: SortDropdownProps) => {
   return (
     <DialogTrigger>
       <AriaButton className="flex cursor-pointer items-center gap-1" onPress={() => setIsOpen(!isOpen)}>
-        <span>Sort By</span>
+        <span>{selectedSort || 'Sort By'}</span>
         <Image src="/svgs/arrow-left.svg" alt="dropdown arrow" width={20} height={20} className="rotate-270" />
       </AriaButton>
 

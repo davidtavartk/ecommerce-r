@@ -2,10 +2,16 @@ import { FiltrationProps } from '@/types/propTypes';
 import FilterDropdown from './FilterDropdown';
 import SortDropdown from './SortDropdown';
 
-const Filtration = ({ from, to, total, onApplyFilter }: FiltrationProps) => {
+const Filtration = ({ from, to, total, onApplyFilter, onSortChange }: FiltrationProps) => {
   const handleFilterApply = (priceFrom: string, priceTo: string) => {
     if (onApplyFilter) {
       onApplyFilter(priceFrom, priceTo);
+    }
+  };
+
+  const handleSortChange = (sortType: string) => {
+    if (onSortChange) {
+      onSortChange(sortType);
     }
   };
 
@@ -18,7 +24,7 @@ const Filtration = ({ from, to, total, onApplyFilter }: FiltrationProps) => {
 
       <div className="flex gap-8 pl-8">
         <FilterDropdown onApplyFilter={handleFilterApply} />
-        <SortDropdown />
+        <SortDropdown onSortChange={handleSortChange} />
       </div>
     </div>
   );

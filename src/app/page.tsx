@@ -46,7 +46,7 @@ export default function Home() {
       setTotalPages(response.meta.last_page);
       setMeta(response.meta);
 
-      router.push(`/?${params.toString()}`, { scroll: false });
+      router.push(`/?${params.toString()}`);
     } catch (error) {
       const errorWithStatus = error as { status?: number };
       if (errorWithStatus.status === 404) {
@@ -82,13 +82,13 @@ export default function Home() {
   const handleFilterApply = (priceFrom: string, priceTo: string) => {
     const newFilters = { ...filters, priceFrom, priceTo };
     setFilters(newFilters);
-    fetchProducts(currentPage, newFilters);
+    fetchProducts(1, newFilters);
   };
 
   const handleSortChange = (sortType: string) => {
     const newFilters = { ...filters, sortBy: sortType };
     setFilters(newFilters);
-    fetchProducts(currentPage, newFilters);
+    fetchProducts(1, newFilters);
   };
 
   return (

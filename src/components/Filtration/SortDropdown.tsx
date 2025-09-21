@@ -14,9 +14,14 @@ const SortDropdown = ({ onSortChange, currentSort }: SortDropdownProps) => {
   const [selectedSort, setSelectedSort] = useState<string>(currentSort || '');
 
   const handleSortSelect = (sortType: string) => {
-    setSelectedSort(sortType);
+    if (selectedSort === sortType) {
+      setSelectedSort('');
+      onSortChange('');
+    } else {
+      setSelectedSort(sortType);
+      onSortChange(sortType);
+    }
     setIsOpen(false);
-    onSortChange(sortType);
   };
 
   const getSelectedLabel = () => {
@@ -47,7 +52,9 @@ const SortDropdown = ({ onSortChange, currentSort }: SortDropdownProps) => {
           {sortOptions.map((option) => (
             <span
               key={option.key}
-              className="cursor-pointer py-2 text-sm transition-all duration-300 hover:scale-105"
+              className={`cursor-pointer py-2 text-sm transition-all duration-300 hover:scale-105 ${
+                selectedSort === option.key ? 'text-c-orange font-medium' : ''
+              }`}
               onClick={() => handleSortSelect(option.key)}
             >
               {option.label}

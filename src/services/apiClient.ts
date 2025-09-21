@@ -2,7 +2,18 @@ import { API_URL } from '@/constants/url';
 import { getCookie } from '@/utils/browser';
 
 export async function apiRequest<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-  const token = getCookie('accessToken');
+  let token: string | null = null;
+
+  // Server-side: read from headers, Client-side: read from document.cookie
+  if (typeof window === 'undefined') {
+    // Server-side - pass cookies from the component
+    const { cookies } = await import('next/headers');
+    const cookieStore = await cookies();
+    token = cookieStore.get('accessToken')?.value || null;
+  } else {
+    // Client-side
+    token = getCookie('accessToken');
+  }
 
   const isFormData = options.body instanceof FormData;
 

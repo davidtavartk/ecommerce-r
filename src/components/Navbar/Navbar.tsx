@@ -5,13 +5,19 @@ import Image from 'next/image';
 import { useEffect } from 'react';
 import CircleButton from '../common/Button/CircleButton';
 import Link from 'next/link';
+import { useCartStore } from '@/store/cartStore';
+import CartSidebar from '../Cart/CartSidebar';
 
 const Navbar = () => {
   const { user, isAuthenticated, logout, initializeAuth } = useAuthStore();
+  const { toggleCart, fetchCart } = useCartStore();
 
   useEffect(() => {
     initializeAuth();
-  }, [initializeAuth]);
+    if (isAuthenticated) {
+      fetchCart();
+    }
+  }, [initializeAuth, isAuthenticated, fetchCart]);
 
   return (
     <nav className="h-[80px]">
@@ -23,7 +29,9 @@ const Navbar = () => {
 
         {isAuthenticated ? (
           <div className="flex items-center gap-5">
-            <Image src="/svgs/cartIcon.svg" alt="cartIcon" width={24} height={24} />
+            <button onClick={toggleCart} className="cursor-pointer">
+              <Image src="/svgs/cart-icon.svg" alt="Cart Icon" width={24} height={24} />
+            </button>
             <div className="flex items-center gap-3">
               {user?.avatar ? (
                 <CircleButton photoSrc={user.avatar} size={40} />
@@ -44,6 +52,7 @@ const Navbar = () => {
           </Link>
         )}
       </div>
+      <CartSidebar />
     </nav>
   );
 };

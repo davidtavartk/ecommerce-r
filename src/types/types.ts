@@ -53,3 +53,32 @@ export interface PaginatedResponse<T> {
     total: number;
   };
 }
+
+export interface CartItem {
+  id: number;
+  product_id: number;
+  quantity: number;
+  color: string;
+  size: string;
+  product: Product;
+}
+
+export interface CartResponse {
+  items: CartItem[];
+  total_quantity: number;
+  total_price: number;
+}
+
+export interface CartState {
+  items: CartItem[];
+  totalQuantity: number;
+  totalPrice: number;
+  isOpen: boolean;
+  loading: boolean;
+  fetchCart: () => Promise<void>;
+  addToCart: (productId: number, quantity: number, color: string, size: string) => Promise<void>;
+  updateCartItem: (itemId: number, quantity: number, color?: string, size?: string) => Promise<void>;
+  removeFromCart: (itemId: number) => Promise<void>;
+  clearCart: () => void;
+  toggleCart: () => void;
+}

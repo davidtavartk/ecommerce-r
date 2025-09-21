@@ -44,7 +44,7 @@ const FilterDropdown = ({ onApplyFilter }: FilterDropdownProps) => {
   return (
     <DialogTrigger>
       <AriaButton className="flex cursor-pointer items-center gap-2" onPress={() => setIsOpen(!isOpen)}>
-        <Image src="/svgs/filter-icon.svg" alt="Filter" width={24} height={24} />
+        <Image src="/svgs/filter-icon.svg" alt="Filter" width={24} height={24} priority />
         <span>Filter</span>
       </AriaButton>
 
@@ -85,7 +85,7 @@ const FilterDropdown = ({ onApplyFilter }: FilterDropdownProps) => {
               </div>
 
               <div className="flex justify-end">
-                <Button type="submit" className="w-[124px] px-5 py-2.5 mt-2.5">
+                <Button type="submit" className="mt-2.5 w-[124px] px-5 py-2.5">
                   Apply
                 </Button>
               </div>

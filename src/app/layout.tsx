@@ -1,10 +1,10 @@
-import type { Metadata } from "next";
-import "../styles/globals.css";
-import Navbar from "@/components/Navbar/Navbar";
+import type { Metadata } from 'next';
+import '../styles/globals.css';
+import Navbar from '@/components/Navbar/Navbar';
 
 export const metadata: Metadata = {
-  title: "RedSeam Clothing",
-  description: "Your one-stop shop for the latest fashion trends",
+  title: 'RedSeam Clothing',
+  description: 'Your one-stop shop for the latest fashion trends',
 };
 
 export default function RootLayout({
@@ -15,8 +15,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Navbar />
-        {children}
+        <div className="relative">
+          <Navbar />
+          {children}
+        </div>
       </body>
     </html>
   );

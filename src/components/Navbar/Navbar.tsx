@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import CircleButton from '../common/Button/CircleButton';
+import Link from 'next/link';
 
 const Navbar = () => {
   const router = useRouter();
@@ -17,10 +18,10 @@ const Navbar = () => {
   return (
     <nav className="h-[80px]">
       <div className="mx-auto flex h-full items-center justify-between px-[100px]">
-        <div className="flex cursor-pointer items-center gap-1" onClick={() => router.push('/')}>
-          <Image src="/images/logo.png" alt="Logo" width={24} height={24} priority/>
+        <Link href="/" className="flex cursor-pointer items-center gap-1">
+          <Image src="/images/logo.png" alt="Logo" width={24} height={24} priority />
           <span className="font-semibold">RedSeam Clothing</span>
-        </div>
+        </Link>
 
         {isAuthenticated ? (
           <div className="flex items-center gap-5">
@@ -29,7 +30,6 @@ const Navbar = () => {
               {user?.avatar ? (
                 <CircleButton photoSrc={user.avatar} size={40} />
               ) : (
-
                 <CircleButton size={40}>
                   <span className="text-xs font-bold text-gray-600">{user?.username?.charAt(0).toUpperCase()}</span>
                 </CircleButton>
@@ -40,10 +40,10 @@ const Navbar = () => {
             </div>
           </div>
         ) : (
-          <button className="flex cursor-pointer items-center gap-2" onClick={() => router.push('/signup')}>
+          <Link href="/signup" className="flex cursor-pointer items-center gap-2">
             <Image src="/svgs/loginIcon.svg" alt="loginIcon" width={20} height={20} />
             <span className="text-xs font-medium">Log In</span>
-          </button>
+          </Link>
         )}
       </div>
     </nav>

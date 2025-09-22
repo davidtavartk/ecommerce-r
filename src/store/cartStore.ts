@@ -35,16 +35,9 @@ export const useCartStore = create<CartState>((set, get) => ({
   addToCart: async (productId: number, quantity: number, color: string, size: string) => {
     set({ loading: true });
     try {
-      const response = await cartService.addToCart(productId, quantity, color, size);
+      await cartService.addToCart(productId, quantity, color, size);
 
-      console.log('API Response:', response);
-
-      set({
-        items: response.items || [],
-        totalQuantity: response.total_quantity || 0,
-        totalPrice: response.total_price || 0,
-        loading: false,
-      });
+      await get().fetchCart();
     } catch (error) {
       console.error('Failed to add to cart:', error);
       set({ loading: false });

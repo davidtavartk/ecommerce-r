@@ -12,11 +12,16 @@ export const useCartStore = create<CartState>((set, get) => ({
   fetchCart: async () => {
     set({ loading: true });
     try {
-      const response = await cartService.getCart();
+      const cartItems = await cartService.getCart();
+
+      // Calculate totals from the array
+      const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+      const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
       set({
-        items: response.items || [],
-        totalQuantity: response.total_quantity,
-        totalPrice: response.total_price,
+        items: cartItems,
+        totalQuantity,
+        totalPrice,
         loading: false,
       });
     } catch (error) {
@@ -26,15 +31,21 @@ export const useCartStore = create<CartState>((set, get) => ({
   },
 
   addToCart: async (productId: number, quantity: number, color: string, size: string) => {
+    set({ loading: true });
     try {
       const response = await cartService.addToCart(productId, quantity, color, size);
+
+      console.log('API Response:', response);
+
       set({
-        items: response.items,
-        totalQuantity: response.total_quantity,
-        totalPrice: response.total_price,
+        items: response.items || [],
+        totalQuantity: response.total_quantity || 0,
+        totalPrice: response.total_price || 0,
+        loading: false,
       });
     } catch (error) {
       console.error('Failed to add to cart:', error);
+      set({ loading: false });
       throw error;
     }
   },

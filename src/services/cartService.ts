@@ -1,14 +1,13 @@
-import { CartResponse } from '@/types/types';
+import { CartItem, CartResponse } from '@/types/types';
 import { apiRequest } from './apiClient';
 
 export const cartService = {
-  getCart: () => apiRequest<CartResponse>('/cart', { method: 'GET' }),
+  getCart: () => apiRequest<CartItem[]>('/cart', { method: 'GET' }),
 
   addToCart: (productId: number, quantity: number, color: string, size: string) =>
-    apiRequest<CartResponse>('/cart', {
+    apiRequest<CartResponse>(`/cart/products/${productId}`, {
       method: 'POST',
       body: JSON.stringify({
-        product_id: productId,
         quantity,
         color,
         size,

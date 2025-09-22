@@ -34,7 +34,8 @@ export interface Product {
     name: string;
     image: string;
   };
-  size: string
+  size: string;
+  color: string;
 }
 
 export interface PaginatedResponse<T> {
@@ -63,6 +64,9 @@ export interface CartItem {
   color: string;
   size: string;
   product: Product;
+  price: number;
+  cover_image: string;
+  name: string;
 }
 
 export interface CartResponse {

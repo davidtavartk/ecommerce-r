@@ -1,4 +1,4 @@
-import { Product } from './types';
+import { CartItem, Product } from './types';
 
 export interface ProductCardProps {
   product: Product;
@@ -21,4 +21,10 @@ export interface FiltrationProps {
   onApplyFilter?: (priceFrom: string, priceTo: string) => void;
   onSortChange?: (sortType: string) => void;
   currentSort?: string;
+}
+
+export interface CartItemProps {
+  product: CartItem;
+  onUpdateQuantity?: (itemId: number, newQuantity: number) => void;
+  onRemove?: (itemId: number) => void;
 }

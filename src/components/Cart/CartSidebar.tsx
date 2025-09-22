@@ -3,27 +3,10 @@
 import { useCartStore } from '@/store/cartStore';
 import Image from 'next/image';
 import Button from '../common/Button/Button';
-import Link from 'next/link';
+import CartItem from './CartItem';
 
 const CartSidebar = () => {
   const { items, totalQuantity, totalPrice, isOpen, loading, toggleCart, removeFromCart, updateCartItem } = useCartStore();
-
-  //   const handleUpdateQuantity = async (itemId: number, newQuantity: number) => {
-  //     if (newQuantity <= 0) {
-  //       await removeFromCart(itemId);
-  //     } else {
-  //       await updateCartItem(itemId, newQuantity);
-  //     }
-  //   };
-
-  //   const handleRemoveItem = async (itemId: number) => {
-  //     await removeFromCart(itemId);
-  //   };
-
-  //   const handleCheckout = () => {
-  //     toggleCart();
-  //     router.push('/checkout');
-  //   };
 
   if (!isOpen) return null;
 
@@ -55,7 +38,37 @@ const CartSidebar = () => {
             </Button>
           </div>
         ) : (
-          <div>Non Empty Cart Content</div>
+          <div className="flex flex-1 flex-col justify-between">
+            {/* Cart Items List */}
+            <div className="mt-16 flex flex-col gap-9">
+              {items.map((item) => (
+                <CartItem key={item.id} product={item} onUpdateQuantity={updateCartItem} onRemove={removeFromCart} />
+              ))}
+            </div>
+
+            <div className="flex-end flex flex-col gap-24">
+              {/* Cart Summary and Checkout */}
+              <div className="flex flex-col gap-4">
+                <span className="text-l-blue flex items-center justify-between">
+                  <span>Items subtotal</span>
+                  <span>$ 50</span>
+                </span>
+                <span className="text-l-blue flex items-center justify-between">
+                  <span>Delivery</span>
+                  <span>$ 5</span>
+                </span>
+                <span className="flex items-center justify-between text-xl font-medium">
+                  <span>Total</span>
+                  <span>$ 55</span>
+                </span>
+              </div>
+
+              {/* Go to checkout */}
+              <Button onClick={toggleCart} className="py-4">
+                Go to Checkout
+              </Button>
+            </div>
+          </div>
         )}
       </div>
     </>

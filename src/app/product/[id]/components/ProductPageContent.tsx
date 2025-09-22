@@ -21,9 +21,9 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
   const [selectedSize, setSelectedSize] = useState<string>(product.available_sizes[0] || '');
   const [quantity, setQuantity] = useState<number>(1);
   const [isQuantityOpen, setIsQuantityOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
 
-  const { addToCart } = useCartStore();
+  const { addToCart, loading: cartLoading } = useCartStore();
   const { isAuthenticated } = useAuthStore();
   const router = useRouter();
 
@@ -34,19 +34,17 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
     }
 
     if (!selectedColor || !selectedSize) {
-      alert('Please select color and size');
+      alert('Please select both color and size before adding to cart');
       return;
     }
 
-    setIsLoading(true);
     try {
       await addToCart(product.id, quantity, selectedColor, selectedSize);
-      alert('Product added to cart successfully!');
-    } catch (error) {
+      alert('✅ Product added to cart successfully!');
+    } catch (error: any) {
       console.error('Failed to add to cart:', error);
-      alert('Failed to add to cart. Please try again.');
-    } finally {
-      setIsLoading(false);
+      const errorMessage = error?.data?.message || error?.message || 'Failed to add to cart. Please try again.';
+      alert(`❌ ${errorMessage}`);
     }
   };
 
@@ -181,9 +179,22 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
             </div>
           </div>
           {/* Button */}
-          <Button className="py-4" onClick={handleAddToCart} disabled={isLoading || !selectedColor || !selectedSize}>
-            <Image src="/svgs/cart-icon-w.svg" alt="Cart Icon" width={24} height={24} className="h-6 w-6 flex-shrink-0" />
-            <span className="text-lg font-medium">Add to Cart</span>
+          <Button
+            className={`py-4 ${cartLoading ? 'opacity-75' : ''}`}
+            onClick={handleAddToCart}
+            disabled={cartLoading || !selectedColor || !selectedSize}
+          >
+            {cartLoading ? (
+              <>
+                <div className="h-6 w-6 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                <span className="text-lg font-medium">Adding...</span>
+              </>
+            ) : (
+              <>
+                <Image src="/svgs/cart-icon-w.svg" alt="Cart Icon" width={24} height={24} className="h-6 w-6 flex-shrink-0" />
+                <span className="text-lg font-medium">Add to Cart</span>
+              </>
+            )}
           </Button>
         </div>
 

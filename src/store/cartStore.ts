@@ -7,7 +7,7 @@ export const useCartStore = create<CartState>((set, get) => ({
   totalQuantity: 0,
   totalPrice: 0,
   isOpen: false,
-  loading: false,
+  loading: true,
   updateLoading: false,
 
   fetchCart: async (silent = false) => {
@@ -24,11 +24,11 @@ export const useCartStore = create<CartState>((set, get) => ({
         items: cartItems,
         totalQuantity,
         totalPrice,
-        loading: silent ? get().loading : false,
+        loading: false,
       });
     } catch (error) {
       console.error('Failed to fetch cart:', error);
-      set({ items: [], totalQuantity: 0, totalPrice: 0, loading: silent ? get().loading : false });
+      set({ items: [], totalQuantity: 0, totalPrice: 0, loading: false });
     }
   },
 

@@ -1,14 +1,55 @@
+'use client';
+
 import Button from '@/components/common/Button/Button';
 import { colors } from '@/constants/consts';
+import { useAuthStore } from '@/store/authStore';
+import { useCartStore } from '@/store/cartStore';
 import { Product } from '@/types/types';
 import { capitalizeWords } from '@/utils/formatters';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { Button as AriaButton, Popover, DialogTrigger } from 'react-aria-components';
 
 interface ProductPageContentProps {
   product: Product;
 }
 
 export default function ProductPageContent({ product }: ProductPageContentProps) {
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
+  const [selectedColor, setSelectedColor] = useState<string>(product.available_colors[0] || '');
+  const [selectedSize, setSelectedSize] = useState<string>(product.available_sizes[0] || '');
+  const [quantity, setQuantity] = useState<number>(1);
+  const [isQuantityOpen, setIsQuantityOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { addToCart } = useCartStore();
+  const { isAuthenticated } = useAuthStore();
+  const router = useRouter();
+
+  const handleAddToCart = async () => {
+    if (!isAuthenticated) {
+      router.push('/signup');
+      return;
+    }
+
+    if (!selectedColor || !selectedSize) {
+      alert('Please select color and size');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      await addToCart(product.id, quantity, selectedColor, selectedSize);
+      alert('Product added to cart successfully!');
+    } catch (error) {
+      console.error('Failed to add to cart:', error);
+      alert('Failed to add to cart. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="flex gap-[168px]">
       {/* Left Content */}
@@ -16,13 +57,25 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
         {/* Thumbnail Column */}
         <div className="flex flex-col gap-[9px]">
           {product.images.map((image, index) => (
-            <Image key={index} src={image} alt={`Product Image ${index + 1}`} width={121} height={121} className="object-cover" />
+            <Image
+              key={index}
+              src={image}
+              alt={`Product Image ${index + 1}`}
+              width={121}
+              height={121}
+              className="object-cover"
+              onClick={() => {
+                setSelectedImageIndex(index);
+                setSelectedColor(product.available_colors[index] || '');
+              }}
+              style={{ width: 'auto', height: 'auto' }}
+            />
           ))}
         </div>
         {/* Main Image */}
         <div className="h-full w-full flex-1 rounded-[10px]">
           <Image
-            src={product.cover_image}
+            src={product.images[selectedImageIndex] || product.cover_image}
             alt={product.name}
             width={412}
             height={549}
@@ -51,13 +104,19 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
                 {product.available_colors.map((color) => {
                   const colorHex = colors[color as keyof typeof colors];
                   const isWhiteColor = color === 'White' || color === 'Off White' || color === 'Cream';
+                  const isSelected = selectedColor === color;
 
                   return (
                     <span
                       key={color}
-                      className={`size-[38px] cursor-pointer rounded-full border-2 ${
-                        isWhiteColor ? 'border-gray-300' : 'border-transparent'
-                      }`}
+                      onClick={() => {
+                        const colorIndex = product.available_colors.indexOf(color);
+                        setSelectedColor(color);
+                        setSelectedImageIndex(colorIndex);
+                      }}
+                      className={`size-[38px] cursor-pointer rounded-full transition-all ${
+                        isSelected ? 'ring-l-gray ring-2 ring-offset-2' : ''
+                      } ${isWhiteColor ? 'border-2 border-gray-300' : 'border-transparent'}`}
                       style={{ backgroundColor: colorHex }}
                     />
                   );
@@ -66,24 +125,64 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
             </div>
             {/* Size */}
             <div className="flex flex-col gap-4">
-              <span>Size: L</span>
+              <span>Size: {selectedSize}</span>
               <div className="flex gap-2">
-                {product.available_sizes.map((size) => (
-                  <span key={size} className="border-l-gray rounded-[10px] border px-4 py-[9px]">
-                    {size}
-                  </span>
-                ))}
+                {product.available_sizes.map((size) => {
+                  const isSelected = selectedSize === size;
+                  return (
+                    <span
+                      key={size}
+                      onClick={() => setSelectedSize(size)}
+                      className={`flex w-[70px] cursor-pointer items-center justify-center rounded-[10px] border px-4 py-[9px] ${isSelected ? 'border-red bg-[#F8F6F7]' : 'border-l-gray'}`}
+                    >
+                      {size}
+                    </span>
+                  );
+                })}
               </div>
             </div>
 
             {/* Quantity */}
             <div className="flex flex-col gap-4">
               <span>Quantity</span>
+              <DialogTrigger>
+                <AriaButton
+                  className="border-l-gray flex w-[70px] cursor-pointer items-center justify-between rounded-[10px] border px-4 py-[9px]"
+                  onPress={() => setIsQuantityOpen(!isQuantityOpen)}
+                >
+                  <span>{quantity}</span>
+                  <Image src="/svgs/arrow-left.svg" alt="Arrow Down" width={20} height={20} className="rotate-270" />
+                </AriaButton>
+
+                <Popover
+                  isOpen={isQuantityOpen}
+                  onOpenChange={setIsQuantityOpen}
+                  className="border-l-gray w-[70px] rounded-lg border bg-white p-2 shadow-lg"
+                  placement="bottom"
+                >
+                  <div className="flex flex-col gap-1">
+                    {[1, 2, 3, 4, 5].map((num) => (
+                      <button
+                        key={num}
+                        onClick={() => {
+                          setQuantity(num);
+                          setIsQuantityOpen(false);
+                        }}
+                        className={`cursor-pointer rounded px-3 py-1 hover:bg-orange-600 hover:text-white ${
+                          quantity === num ? 'bg-c-orange text-white' : ''
+                        }`}
+                      >
+                        {num}
+                      </button>
+                    ))}
+                  </div>
+                </Popover>
+              </DialogTrigger>
             </div>
           </div>
           {/* Button */}
-          <Button className="py-4">
-            <Image src="/svgs/cart-icon-w.svg" alt="Cart Icon" width={24} height={24} />
+          <Button className="py-4" onClick={handleAddToCart} disabled={isLoading || !selectedColor || !selectedSize}>
+            <Image src="/svgs/cart-icon-w.svg" alt="Cart Icon" width={24} height={24} className="h-6 w-6 flex-shrink-0" />
             <span className="text-lg font-medium">Add to Cart</span>
           </Button>
         </div>

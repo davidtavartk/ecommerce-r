@@ -34,6 +34,7 @@ export interface Product {
     name: string;
     image: string;
   };
+  size: string
 }
 
 export interface PaginatedResponse<T> {

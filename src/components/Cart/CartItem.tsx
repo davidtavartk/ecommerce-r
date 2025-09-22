@@ -40,6 +40,7 @@ const CartItem = ({ product, onUpdateQuantity, onRemove }: CartItemProps) => {
           width={100}
           height={134}
           className="border-l-gray rounded-[10px] border"
+          priority
         />
       </div>
       <div className="flex flex-1 flex-col gap-[13px] py-2">

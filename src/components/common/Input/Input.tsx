@@ -65,7 +65,7 @@ export const Input = ({
       <div className="relative">
         {isRequired && placeholder && localValue === '' && (
           <span className="text-l-blue pointer-events-none absolute top-1/2 left-4 z-10 -translate-y-1/2 transform text-sm">
-            {placeholder} <span className="text-c-orange">*</span>
+            {placeholder}
           </span>
         )}
         <AriaInput

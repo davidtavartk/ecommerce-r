@@ -77,18 +77,28 @@ export const useCartStore = create<CartState>((set, get) => ({
   },
 
   removeFromCart: async (itemId: number) => {
-    try {
-      const response = await cartService.removeFromCart(itemId);
-      set({
-        items: response.items,
-        totalQuantity: response.total_quantity,
-        totalPrice: response.total_price,
-      });
-    } catch (error) {
-      console.error('Failed to remove from cart:', error);
-      throw error;
+  try {
+    const cartItem = get().items.find((item) => item.id === itemId);
+    if (!cartItem) {
+      throw new Error('Cart item not found');
     }
-  },
+
+    await cartService.removeFromCart(cartItem.id);
+    
+    const updatedItems = get().items.filter((item) => item.id !== itemId);
+    const newTotalQuantity = updatedItems.reduce((sum, item) => sum + item.quantity, 0);
+    const newTotalPrice = updatedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    
+    set({
+      items: updatedItems,
+      totalQuantity: newTotalQuantity,
+      totalPrice: newTotalPrice,
+    });
+  } catch (error) {
+    console.error('Failed to remove from cart:', error);
+    throw error;
+  }
+},
 
   clearCart: () => {
     set({ items: [], totalQuantity: 0, totalPrice: 0 });

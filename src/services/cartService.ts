@@ -22,5 +22,5 @@ export const cartService = {
       }),
     }),
 
-  removeFromCart: (itemId: number) => apiRequest<CartResponse>(`/cart/${itemId}`, { method: 'DELETE' }),
+  removeFromCart: (productId: number) => apiRequest<CartResponse>(`/cart/products/${productId}`, { method: 'DELETE' }),
 };

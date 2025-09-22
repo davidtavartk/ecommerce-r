@@ -43,5 +43,9 @@ export async function apiRequest<T>(endpoint: string, options: RequestInit = {})
     throw error;
   }
 
+  if (response.status === 204 || response.headers.get('content-length') === '0') {
+    return {} as T;
+  }
+
   return response.json();
 }

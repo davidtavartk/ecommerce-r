@@ -5,29 +5,67 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
   if (totalPages <= 1) return null;
 
   const getVisiblePages = () => {
-    const delta = 2;
-    const range = [];
-    const rangeWithDots = [];
-
-    for (let i = Math.max(2, currentPage - delta); i <= Math.min(totalPages - 1, currentPage + delta); i++) {
-      range.push(i);
+    if (totalPages <= 4) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
     }
 
-    if (currentPage - delta > 2) {
-      rangeWithDots.push(1, '...');
+    const pages = [];
+
+    if (currentPage === 1) {
+      pages.push(1, 2);
+      if (totalPages > 4) {
+        pages.push('...');
+      }
+      if (totalPages > 3) {
+        pages.push(totalPages - 1);
+      }
+      pages.push(totalPages);
+    } else if (currentPage === 2) {
+      pages.push(1, 2, 3);
+      if (totalPages > 5) {
+        pages.push('...');
+      }
+      if (totalPages > 4) {
+        pages.push(totalPages - 1);
+      }
+      pages.push(totalPages);
+    } else if (currentPage === 3) {
+      pages.push(1, 2, 3, 4);
+      if (totalPages > 6) {
+        pages.push('...');
+      }
+      if (totalPages > 5) {
+        pages.push(totalPages - 1);
+      }
+      pages.push(totalPages);
+    } else if (currentPage >= totalPages - 1) {
+      pages.push(1, 2);
+      if (totalPages - 2 > 3) {
+        pages.push('...');
+      }
+      for (let i = Math.max(3, totalPages - 2); i <= totalPages; i++) {
+        if (!pages.includes(i)) {
+          pages.push(i);
+        }
+      }
     } else {
-      rangeWithDots.push(1);
+      pages.push(1, 2);
+      if (currentPage - 1 > 3) {
+        pages.push('...');
+      }
+      pages.push(currentPage - 1, currentPage, currentPage + 1);
+      if (currentPage + 1 < totalPages - 2) {
+        pages.push('...');
+      }
+      if (currentPage + 1 < totalPages - 1) {
+        pages.push(totalPages - 1);
+      }
+      if (currentPage + 1 < totalPages) {
+        pages.push(totalPages);
+      }
     }
 
-    rangeWithDots.push(...range);
-
-    if (currentPage + delta < totalPages - 1) {
-      rangeWithDots.push('...', totalPages);
-    } else {
-      rangeWithDots.push(totalPages);
-    }
-
-    return rangeWithDots.filter((item, index, arr) => arr.indexOf(item) === index);
+    return pages;
   };
 
   return (
@@ -47,7 +85,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
           </span>
         ) : (
           <button
-            key={page}
+            key={`page-${page}-${index}`}
             onClick={() => onPageChange(page as number)}
             className={`size-8 cursor-pointer rounded-sm border text-sm ${
               page === currentPage

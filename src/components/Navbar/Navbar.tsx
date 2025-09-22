@@ -47,7 +47,7 @@ const Navbar = () => {
           </div>
         ) : (
           <Link href="/signup" className="flex cursor-pointer items-center gap-2">
-            <Image src="/svgs/loginIcon.svg" alt="loginIcon" width={20} height={20} />
+            <Image src="/svgs/login-icon.svg" alt="login Icon" width={20} height={20} />
             <span className="text-xs font-medium">Log In</span>
           </Link>
         )}

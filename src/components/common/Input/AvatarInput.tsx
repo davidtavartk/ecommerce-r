@@ -45,7 +45,7 @@ export const RHFAvatarInput = ({ name, size = 88 }: AvatarInputProps) => {
         <div className='flex gap-5 items-center'>
           <div className="flex cursor-pointer items-center gap-4" onClick={handleClick}>
             <CircleButton photoSrc={preview || undefined} size={size}>
-              <Image src="/svgs/cameraIcon.svg" alt="upload" width={24} height={24} />
+              <Image src="/svgs/camera-icon.svg" alt="upload" width={24} height={24} />
             </CircleButton>
             <span className="text-sm">Upload image</span>
           </div>

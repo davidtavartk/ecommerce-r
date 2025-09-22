@@ -1,16 +1,20 @@
 'use client';
 
 import CartContent from '@/components/Cart/CartContent';
-// import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import CheckoutForm from './components/CheckoutForm/CheckoutForm';
 import { CheckoutFormData } from './schema';
+import { useState } from 'react';
+import SuccessModal from '@/components/common/Modal/SuccessModal';
 
 export default function CheckoutPage() {
-  // const router = useRouter();
+  const router = useRouter();
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleFormSubmit = (data: CheckoutFormData) => {
     console.log('Checkout form data:', data);
-    // Handle form submission here
+    // Simulate API call success
+    setShowSuccessModal(true);
   };
 
   const handlePay = () => {
@@ -19,6 +23,15 @@ export default function CheckoutPage() {
     if (form) {
       form.requestSubmit();
     }
+  };
+
+  const handleContinueShopping = () => {
+    setShowSuccessModal(false);
+    router.push('/');
+  };
+
+  const handleCloseModal = () => {
+    setShowSuccessModal(false);
   };
 
   return (
@@ -42,6 +55,7 @@ export default function CheckoutPage() {
           />
         </div>
       </div>
+      <SuccessModal isOpen={showSuccessModal} onClose={handleCloseModal} onContinueShopping={handleContinueShopping} />
     </div>
   );
 }

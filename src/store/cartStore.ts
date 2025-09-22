@@ -8,13 +8,15 @@ export const useCartStore = create<CartState>((set, get) => ({
   totalPrice: 0,
   isOpen: false,
   loading: false,
+  updateLoading: false,
 
-  fetchCart: async () => {
-    set({ loading: true });
+  fetchCart: async (silent = false) => {
+    if (!silent) {
+      set({ loading: true });
+    }
     try {
       const cartItems = await cartService.getCart();
 
-      // Calculate totals from the array
       const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
       const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
@@ -22,11 +24,11 @@ export const useCartStore = create<CartState>((set, get) => ({
         items: cartItems,
         totalQuantity,
         totalPrice,
-        loading: false,
+        loading: silent ? get().loading : false,
       });
     } catch (error) {
       console.error('Failed to fetch cart:', error);
-      set({ items: [], totalQuantity: 0, totalPrice: 0, loading: false });
+      set({ items: [], totalQuantity: 0, totalPrice: 0, loading: silent ? get().loading : false });
     }
   },
 
@@ -50,16 +52,33 @@ export const useCartStore = create<CartState>((set, get) => ({
     }
   },
 
-  updateCartItem: async (itemId: number, quantity: number, color?: string, size?: string) => {
+  updateCartItem: async (itemId: number, quantity: number) => {
+    const currentItems = get().items;
+    const updatedItems = currentItems.map((item) => (item.id === itemId ? { ...item, quantity } : item));
+
+    const newTotalQuantity = updatedItems.reduce((sum, item) => sum + item.quantity, 0);
+    const newTotalPrice = updatedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+    set({
+      items: updatedItems,
+      totalQuantity: newTotalQuantity,
+      totalPrice: newTotalPrice,
+    });
+
     try {
-      const response = await cartService.updateCartItem(itemId, quantity, color, size);
-      set({
-        items: response.items,
-        totalQuantity: response.total_quantity,
-        totalPrice: response.total_price,
-      });
+      const cartItem = currentItems.find((item) => item.id === itemId);
+      if (!cartItem) {
+        throw new Error('Cart item not found');
+      }
+
+      await cartService.updateCartItem(cartItem.id, quantity);
     } catch (error) {
       console.error('Failed to update cart item:', error);
+      set({
+        items: currentItems,
+        totalQuantity: currentItems.reduce((sum, item) => sum + item.quantity, 0),
+        totalPrice: currentItems.reduce((sum, item) => sum + item.price * item.quantity, 0),
+      });
       throw error;
     }
   },

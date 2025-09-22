@@ -14,13 +14,11 @@ export const cartService = {
       }),
     }),
 
-  updateCartItem: (itemId: number, quantity: number, color?: string, size?: string) =>
-    apiRequest<CartResponse>(`/cart/${itemId}`, {
-      method: 'PUT',
+  updateCartItem: (productId: number, quantity: number) =>
+    apiRequest<CartResponse>(`/cart/products/${productId}`, {
+      method: 'PATCH',
       body: JSON.stringify({
         quantity,
-        ...(color && { color }),
-        ...(size && { size }),
       }),
     }),
 

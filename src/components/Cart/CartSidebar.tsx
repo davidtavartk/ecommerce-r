@@ -6,7 +6,7 @@ import Button from '../common/Button/Button';
 import CartItem from './CartItem';
 
 const CartSidebar = () => {
-  const { items, totalQuantity, totalPrice, isOpen, loading, toggleCart, removeFromCart, updateCartItem } = useCartStore();
+  const { items, totalQuantity, totalPrice, isOpen, updateLoading, toggleCart, removeFromCart, updateCartItem } = useCartStore();
 
   if (!isOpen) return null;
 
@@ -59,7 +59,7 @@ const CartSidebar = () => {
                 </span>
                 <span className="flex items-center justify-between text-xl font-medium">
                   <span>Total</span>
-                  <span>$ 55</span>
+                  <span>$ {totalPrice}</span>
                 </span>
               </div>
 

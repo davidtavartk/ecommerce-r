@@ -81,6 +81,7 @@ export interface CartState {
   totalPrice: number;
   isOpen: boolean;
   loading: boolean;
+  updateLoading: boolean;
   fetchCart: () => Promise<void>;
   addToCart: (productId: number, quantity: number, color: string, size: string) => Promise<void>;
   updateCartItem: (itemId: number, quantity: number, color?: string, size?: string) => Promise<void>;

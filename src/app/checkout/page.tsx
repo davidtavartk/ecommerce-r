@@ -3,17 +3,18 @@
 import CartContent from '@/components/Cart/CartContent';
 import { useRouter } from 'next/navigation';
 import CheckoutForm from './components/CheckoutForm/CheckoutForm';
-import { CheckoutFormData } from './schema';
 import { useState } from 'react';
 import SuccessModal from '@/components/common/Modal/SuccessModal';
+import { useCartStore } from '@/store/cartStore';
 
 export default function CheckoutPage() {
   const router = useRouter();
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const handleFormSubmit = (data: CheckoutFormData) => {
-    console.log('Checkout form data:', data);
-    // Simulate API call success
+  const { clearCart } = useCartStore();
+
+  const handleFormSubmit = () => {
+    clearCart();
     setShowSuccessModal(true);
   };
 

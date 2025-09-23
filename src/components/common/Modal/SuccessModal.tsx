@@ -14,7 +14,10 @@ const SuccessModal = ({ isOpen, onClose, onContinueShopping }: SuccessModalProps
   return (
     <ModalOverlay isOpen={isOpen} onOpenChange={onClose} className="fixed inset-0 z-50">
       <Modal className="h-full w-full max-w-none">
-        <Dialog className="relative flex h-full w-full flex-col items-center justify-center gap-[74px] bg-white">
+        <Dialog
+          className="relative flex h-full w-full flex-col items-center justify-center gap-[74px] bg-white"
+          aria-label="Order confirmation"
+        >
           {/* Close button */}
           <button onClick={onClose} className="absolute top-10 right-10">
             <Image src="/svgs/x-icon.svg" alt="Close" width={40} height={40} />
@@ -24,7 +27,13 @@ const SuccessModal = ({ isOpen, onClose, onContinueShopping }: SuccessModalProps
           <div className="flex flex-col items-center gap-10">
             {/* Success icon */}
             <div className="flex size-[76px] items-center justify-center rounded-full bg-[#F8F6F7]">
-              <Image src="/svgs/checkmark-icon.svg" alt="Success" width={36} height={29} />
+              <Image
+                src="/svgs/checkmark-icon.svg"
+                alt="Success"
+                width={36}
+                height={29}
+                className="max-h-full max-w-full object-contain"
+              />
             </div>
 
             <div className="flex flex-col items-center gap-4">
@@ -33,7 +42,7 @@ const SuccessModal = ({ isOpen, onClose, onContinueShopping }: SuccessModalProps
             </div>
           </div>
           {/* Continue shopping button */}
-          <Button onClick={onContinueShopping} className="p mt-4 px-5 py-2.5 w-[214px]">
+          <Button onClick={onContinueShopping} className="p mt-4 w-[214px] px-5 py-2.5">
             Continue shopping
           </Button>
         </Dialog>

@@ -1,5 +1,6 @@
 import { CartItem, CartResponse } from '@/types/types';
 import { apiRequest } from './apiClient';
+import { CheckoutFormData } from '@/app/checkout/schema';
 
 export const cartService = {
   getCart: () => apiRequest<CartItem[]>('/cart', { method: 'GET' }),
@@ -23,4 +24,15 @@ export const cartService = {
     }),
 
   removeFromCart: (productId: number) => apiRequest<CartResponse>(`/cart/products/${productId}`, { method: 'DELETE' }),
+
+  checkoutCart: (checkoutData: CheckoutFormData) =>
+    apiRequest('/cart/checkout', {
+      method: 'POST',
+      body: JSON.stringify(checkoutData),
+    }),
+
+  clearAllItems: async () => {
+    const cartItems = await cartService.getCart();
+    await Promise.all(cartItems.map((item) => cartService.removeFromCart(item.id)));
+  },
 };

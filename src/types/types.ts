@@ -1,3 +1,5 @@
+import { CheckoutFormData } from '@/app/checkout/schema';
+
 export interface User {
   id: number;
   username: string;
@@ -82,10 +84,10 @@ export interface CartState {
   isOpen: boolean;
   loading: boolean;
   updateLoading: boolean;
-  fetchCart: () => Promise<void>;
+  fetchCart: (silent?: boolean) => Promise<void>;
   addToCart: (productId: number, quantity: number, color: string, size: string) => Promise<void>;
   updateCartItem: (itemId: number, quantity: number, color?: string, size?: string) => Promise<void>;
   removeFromCart: (itemId: number) => Promise<void>;
-  clearCart: () => void;
+  checkout: (checkoutData: CheckoutFormData) => Promise<void>;
   toggleCart: () => void;
 }

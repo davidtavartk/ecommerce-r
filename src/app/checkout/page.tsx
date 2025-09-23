@@ -6,20 +6,38 @@ import CheckoutForm from './components/CheckoutForm/CheckoutForm';
 import { useState } from 'react';
 import SuccessModal from '@/components/common/Modal/SuccessModal';
 import { useCartStore } from '@/store/cartStore';
+import { CheckoutFormData } from './schema';
 
 export default function CheckoutPage() {
   const router = useRouter();
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const { checkout } = useCartStore();
 
-  const { clearCart } = useCartStore();
+  const handleFormSubmit = async (data: CheckoutFormData, methods: any) => {
+    try {
+      await checkout(data);
+      setShowSuccessModal(true);
+    } catch (error: any) {
 
-  const handleFormSubmit = () => {
-    clearCart();
-    setShowSuccessModal(true);
+      // Handle backend validation errors same as login form
+      if (error.data?.errors) {
+        Object.keys(error.data.errors).forEach((field) => {
+          // Map backend field names to form field names
+          const formField = field === 'zip_code' ? 'zipCode' : field;
+
+          methods.setError(formField as keyof CheckoutFormData, {
+            message: error.data.errors[field][0],
+          });
+        });
+      } else {
+        // Fallback for non-field specific errors
+        const errorMessage = error?.data?.message || error?.message || 'Checkout failed. Please try again.';
+        alert(`❌ ${errorMessage}`);
+      }
+    }
   };
 
   const handlePay = () => {
-    // This will trigger form submission
     const form = document.querySelector('form');
     if (form) {
       form.requestSubmit();

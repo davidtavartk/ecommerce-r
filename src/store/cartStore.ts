@@ -1,6 +1,7 @@
 import { CartState } from '@/types/types';
 import { cartService } from '@/services/cartService';
 import { create } from 'zustand';
+import { CheckoutFormData } from '@/app/checkout/schema';
 
 export const useCartStore = create<CartState>((set, get) => ({
   items: [],
@@ -27,8 +28,8 @@ export const useCartStore = create<CartState>((set, get) => ({
         loading: false,
       });
     } catch (error) {
-      console.error('Failed to fetch cart:', error);
       set({ items: [], totalQuantity: 0, totalPrice: 0, loading: false });
+      throw error;
     }
   },
 
@@ -39,7 +40,6 @@ export const useCartStore = create<CartState>((set, get) => ({
 
       await get().fetchCart();
     } catch (error) {
-      console.error('Failed to add to cart:', error);
       set({ loading: false });
       throw error;
     }
@@ -66,7 +66,6 @@ export const useCartStore = create<CartState>((set, get) => ({
 
       await cartService.updateCartItem(cartItem.id, quantity);
     } catch (error) {
-      console.error('Failed to update cart item:', error);
       set({
         items: currentItems,
         totalQuantity: currentItems.reduce((sum, item) => sum + item.quantity, 0),
@@ -77,31 +76,44 @@ export const useCartStore = create<CartState>((set, get) => ({
   },
 
   removeFromCart: async (itemId: number) => {
-  try {
-    const cartItem = get().items.find((item) => item.id === itemId);
-    if (!cartItem) {
-      throw new Error('Cart item not found');
+    try {
+      const cartItem = get().items.find((item) => item.id === itemId);
+      if (!cartItem) {
+        throw new Error('Cart item not found');
+      }
+
+      await cartService.removeFromCart(cartItem.id);
+
+      const updatedItems = get().items.filter((item) => item.id !== itemId);
+      const newTotalQuantity = updatedItems.reduce((sum, item) => sum + item.quantity, 0);
+      const newTotalPrice = updatedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+      set({
+        items: updatedItems,
+        totalQuantity: newTotalQuantity,
+        totalPrice: newTotalPrice,
+      });
+    } catch (error) {
+      throw error;
     }
+  },
 
-    await cartService.removeFromCart(cartItem.id);
-    
-    const updatedItems = get().items.filter((item) => item.id !== itemId);
-    const newTotalQuantity = updatedItems.reduce((sum, item) => sum + item.quantity, 0);
-    const newTotalPrice = updatedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    
-    set({
-      items: updatedItems,
-      totalQuantity: newTotalQuantity,
-      totalPrice: newTotalPrice,
-    });
-  } catch (error) {
-    console.error('Failed to remove from cart:', error);
-    throw error;
-  }
-},
+  checkout: async (checkoutData: CheckoutFormData) => {
+    set({ loading: true });
+    try {
+      await cartService.checkoutCart(checkoutData);
 
-  clearCart: () => {
-    set({ items: [], totalQuantity: 0, totalPrice: 0 });
+      await cartService.clearAllItems();
+
+      await get().fetchCart(true);
+      set({
+        isOpen: false,
+        loading: false,
+      });
+    } catch (error) {
+      set({ loading: false });
+      throw error;
+    }
   },
 
   toggleCart: () => {

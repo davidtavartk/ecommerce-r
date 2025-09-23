@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import Image from 'next/image';
 
 interface CheckoutFormProps {
-  onSubmit: (data: CheckoutFormData) => void;
+  onSubmit: (data: CheckoutFormData, methods: any) => void;
 }
 
 const CheckoutForm = ({ onSubmit }: CheckoutFormProps) => {
@@ -22,7 +22,7 @@ const CheckoutForm = ({ onSubmit }: CheckoutFormProps) => {
       surname: '',
       email: '',
       address: '',
-      zipCode: '',
+      zip_code: '',
     },
   });
 
@@ -34,9 +34,13 @@ const CheckoutForm = ({ onSubmit }: CheckoutFormProps) => {
 
   const { handleSubmit } = methods;
 
+  const handleFormSubmit = (data: CheckoutFormData) => {
+    onSubmit(data, methods);
+  };
+
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex w-2/3 flex-col gap-[33px]">
+      <form onSubmit={handleSubmit(handleFormSubmit)} className="flex w-2/3 flex-col gap-[33px]">
         {/* Name and Surname row */}
         <div className="flex gap-6">
           <div className="flex-1">
@@ -66,7 +70,7 @@ const CheckoutForm = ({ onSubmit }: CheckoutFormProps) => {
           </div>
           <div className="flex-1">
             <RHFInput
-              name="zipCode"
+              name="zip_code"
               placeholder="Zip code"
               isRequired
               inputClassName="w-full px-3.5 py-2.5 rounded-lg bg-white"

@@ -10,17 +10,13 @@ import { useAuthStore } from '@/store/authStore';
 export default function SignUp() {
   const [isLogin, setIsLogin] = useState(true);
   const router = useRouter();
-  const { isAuthenticated, isLoading } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
 
   useEffect(() => {
     if (isAuthenticated) {
       router.push('/');
     }
   }, [isAuthenticated, router]);
-
-  if (isLoading) {
-    return null; // or a loading spinner
-  }
 
   if (isAuthenticated) {
     return null;

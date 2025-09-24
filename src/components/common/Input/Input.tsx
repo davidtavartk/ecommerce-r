@@ -28,7 +28,9 @@ export const Input = ({
   type = 'text',
   isRequired = false,
 }: InternalInputProps) => {
+  const [isDebouncing, setIsDebouncing] = useState(false);
   const [localValue, setLocalValue] = useState(value ?? '');
+
   const debouncedValue = useDebounce(localValue, debounceMs ?? 0);
 
   // Update local value when external value changes
@@ -60,6 +62,14 @@ export const Input = ({
     //   : '',
   );
 
+  useEffect(() => {
+    if (debounceMs > 0 && localValue !== value) {
+      setIsDebouncing(true);
+      const timer = setTimeout(() => setIsDebouncing(false), debounceMs);
+      return () => clearTimeout(timer);
+    }
+  }, [localValue, value, debounceMs]);
+
   return (
     <TextField aria-label={name} isInvalid={!!errorMessage} className={containerClassName}>
       <div className="relative">
@@ -77,6 +87,11 @@ export const Input = ({
           placeholder={!isRequired ? placeholder : ''}
           className={twMerge(baseInputStyles, inputClassName)}
         />
+        {isDebouncing && (
+          <div className="absolute top-1/2 right-2 -translate-y-1/2">
+            <div className="h-3 w-3 animate-spin rounded-full border border-gray-300 border-t-orange-500" />
+          </div>
+        )}
         {errorMessage && errorMessage.trim() && errorMessage !== '__NO_DISPLAY__' && (
           <FieldError className="text-c-orange absolute top-full left-0 mt-0.5 px-1.5 text-[10px] font-light tracking-tight">
             {errorMessage}

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import '../styles/globals.css';
 import Navbar from '@/components/Navbar/Navbar';
+import AuthLoader from '@/components/common/Loading/AuthLoader/AuthLoader';
 
 export const metadata: Metadata = {
   title: 'RedSeam Clothing',
@@ -16,8 +17,10 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <div className="relative">
-          <Navbar />
-          {children}
+          <AuthLoader>
+            <Navbar />
+            {children}
+          </AuthLoader>
         </div>
       </body>
     </html>

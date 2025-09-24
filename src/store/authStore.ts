@@ -21,6 +21,8 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   initializeAuth: () => {
+    if (typeof window === 'undefined') return;
+
     const token = getCookie('accessToken');
     const savedUser = localStorage.getItem('user');
 

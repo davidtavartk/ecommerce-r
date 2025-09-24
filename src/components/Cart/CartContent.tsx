@@ -60,7 +60,7 @@ const CartContent = ({
         <div className="flex flex-col gap-4">
           <span className="text-l-blue flex items-center justify-between">
             <span>Items subtotal</span>
-            <span>$ 50</span>
+            <span>$ {totalPrice}</span>
           </span>
           <span className="text-l-blue flex items-center justify-between">
             <span>Delivery</span>
@@ -68,7 +68,7 @@ const CartContent = ({
           </span>
           <span className="flex items-center justify-between text-xl font-medium">
             <span>Total</span>
-            <span>$ {totalPrice}</span>
+            <span>$ {totalPrice + 5}</span>
           </span>
         </div>
 

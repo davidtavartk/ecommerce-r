@@ -61,7 +61,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
               alt={`Product Image ${index + 1}`}
               width={121}
               height={121}
-              className="object-cover"
+              className="object-cover cursor-pointer"
               onClick={() => {
                 setSelectedImageIndex(index);
                 setSelectedColor(product.available_colors[index] || '');

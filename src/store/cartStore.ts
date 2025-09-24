@@ -29,7 +29,9 @@ export const useCartStore = create<CartState>((set, get) => ({
       });
     } catch (error) {
       set({ items: [], totalQuantity: 0, totalPrice: 0, loading: false });
-      throw error;
+      if ((error as any)?.status !== 401) {
+        throw error;
+      }
     }
   },
 

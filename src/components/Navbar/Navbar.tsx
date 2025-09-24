@@ -14,10 +14,13 @@ const Navbar = () => {
 
   useEffect(() => {
     initializeAuth();
+  }, [initializeAuth]);
+
+  useEffect(() => {
     if (isAuthenticated) {
       fetchCart();
     }
-  }, [initializeAuth, isAuthenticated, fetchCart]);
+  }, [isAuthenticated, fetchCart]);
 
   return (
     <nav className="h-[80px]">
@@ -55,7 +58,7 @@ const Navbar = () => {
                   <Popover className="border-l-gray w-[120px] rounded-lg border bg-white p-2 shadow-lg" placement="bottom end">
                     <button
                       onClick={logout}
-                      className="w-full rounded px-3 py-2 text-left text-xs font-medium hover:bg-gray-50 hover:underline cursor-pointer"
+                      className="w-full cursor-pointer rounded px-3 py-2 text-left text-xs font-medium hover:bg-gray-50 hover:underline"
                     >
                       Logout
                     </button>

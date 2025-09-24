@@ -7,18 +7,21 @@ import { useState } from 'react';
 import SuccessModal from '@/components/common/Modal/SuccessModal';
 import { useCartStore } from '@/store/cartStore';
 import { CheckoutFormData } from './schema';
+import LoginRequired from '@/components/common/Auth/LoginRequired';
+import { useAuthStore } from '@/store/authStore';
 
 export default function CheckoutPage() {
   const router = useRouter();
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+
   const { checkout } = useCartStore();
+  const { isAuthenticated } = useAuthStore();
 
   const handleFormSubmit = async (data: CheckoutFormData, methods: any) => {
     try {
       await checkout(data);
       setShowSuccessModal(true);
     } catch (error: any) {
-
       // Handle backend validation errors same as login form
       if (error.data?.errors) {
         Object.keys(error.data.errors).forEach((field) => {
@@ -52,6 +55,10 @@ export default function CheckoutPage() {
   const handleCloseModal = () => {
     setShowSuccessModal(false);
   };
+
+  if (!isAuthenticated) {
+    return <LoginRequired onLoginClick={() => router.push('/signup')} onContinueShoppingClick={() => router.push('/')} />;
+  }
 
   return (
     <div className="mx-auto min-h-screen rounded-2xl px-[100px] py-[72px]">

@@ -15,10 +15,9 @@ export const authService = {
     formData.append('password', data.password);
     formData.append('password_confirmation', data.password_confirmation);
 
-    return apiRequest('/register', {
+    return apiRequest<AuthResponse>('/register', {
       method: 'POST',
       body: formData,
-      // headers: {},
     });
   },
 

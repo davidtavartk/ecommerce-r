@@ -44,7 +44,14 @@ const FilterDropdown = ({ onApplyFilter }: FilterDropdownProps) => {
   return (
     <DialogTrigger>
       <AriaButton className="flex cursor-pointer items-center gap-2" onPress={() => setIsOpen(!isOpen)}>
-        <Image src="/svgs/filter-icon.svg" alt="Filter" width={24} height={24} priority />
+        <Image
+          src="/svgs/filter-icon.svg"
+          alt="Filter"
+          width={24}
+          height={24}
+          style={{ width: '24px', height: '24px' }}
+          priority
+        />
         <span>Filter</span>
       </AriaButton>
 

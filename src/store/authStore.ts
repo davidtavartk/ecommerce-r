@@ -31,9 +31,10 @@ export const useAuthStore = create<AuthState>((set) => ({
         const userData = JSON.parse(savedUser);
         set({ user: userData, isAuthenticated: true, isLoading: false });
       } catch {
-        // Invalid saved data
         set({ user: null, isAuthenticated: false, isLoading: false });
       }
+    } else {
+      set({ user: null, isAuthenticated: false, isLoading: false });
     }
   },
 

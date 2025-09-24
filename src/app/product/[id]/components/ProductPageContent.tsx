@@ -1,7 +1,7 @@
 'use client';
 
 import Button from '@/components/common/Button/Button';
-import { colors } from '@/constants/consts';
+import { colors, isWhiteColor } from '@/constants/consts';
 import { useAuthStore } from '@/store/authStore';
 import { useCartStore } from '@/store/cartStore';
 import { Product } from '@/types/types';
@@ -101,7 +101,6 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
               <span className="flex items-center gap-[13px]">
                 {product.available_colors.map((color) => {
                   const colorHex = colors[color as keyof typeof colors];
-                  const isWhiteColor = color === 'White' || color === 'Off White' || color === 'Cream';
                   const isSelected = selectedColor === color;
 
                   return (
@@ -114,7 +113,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
                       }}
                       className={`size-[38px] cursor-pointer rounded-full transition-all ${
                         isSelected ? 'ring-l-gray ring-2 ring-offset-2' : ''
-                      } ${isWhiteColor ? 'border-2 border-gray-300' : 'border-transparent'}`}
+                      } ${isWhiteColor(color) ? 'border-2 border-gray-300' : 'border-transparent'}`}
                       style={{ backgroundColor: colorHex }}
                     />
                   );

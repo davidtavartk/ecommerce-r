@@ -2,6 +2,7 @@ import { CartState } from '@/types/types';
 import { cartService } from '@/services/cartService';
 import { create } from 'zustand';
 import { CheckoutFormData } from '@/app/checkout/schema';
+import { useAuthStore } from './authStore';
 
 export const useCartStore = create<CartState>((set, get) => ({
   items: [],
@@ -28,6 +29,10 @@ export const useCartStore = create<CartState>((set, get) => ({
         loading: false,
       });
     } catch (error) {
+      if ((error as any)?.status === 401) {
+        useAuthStore.getState().handleAuthError();
+        return;
+      }
       set({ items: [], totalQuantity: 0, totalPrice: 0, loading: false });
       if ((error as any)?.status !== 401) {
         throw error;

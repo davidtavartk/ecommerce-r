@@ -20,6 +20,7 @@ export interface AuthState {
   login: (token: string, userData: User) => void;
   logout: () => void;
   initializeAuth: () => void;
+  handleAuthError: () => void;
 }
 
 export interface Product {

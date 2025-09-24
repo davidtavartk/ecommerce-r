@@ -36,4 +36,13 @@ export const useAuthStore = create<AuthState>((set) => ({
       }
     }
   },
+
+  handleAuthError: () => {
+    if (typeof window !== 'undefined') {
+      document.cookie = 'accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+      localStorage.removeItem('user');
+      set({ user: null, isAuthenticated: false, isLoading: false });
+      window.location.href = '/signup';
+    }
+  },
 }));

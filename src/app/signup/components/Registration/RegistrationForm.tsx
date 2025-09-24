@@ -13,6 +13,7 @@ import { useAuthStore } from '@/store/authStore';
 
 const RegistrationForm = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const { login } = useAuthStore();
 
@@ -30,10 +31,9 @@ const RegistrationForm = () => {
   const { handleSubmit } = methods;
 
   const onSubmit = async (data: RegistrationFormData) => {
-    console.log('REGISTER DATA', data);
     try {
       const response = await authService.register(data);
-      // login(response.token, response.user);
+      login(response.token, response.user);
     } catch (err: any) {
       if (err.data?.errors) {
         Object.keys(err.data.errors).forEach((field) => {
@@ -77,7 +77,7 @@ const RegistrationForm = () => {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute top-1/2 right-3 -translate-y-1/2"
+              className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer"
             >
               <EyeIcon isPasswordVisible={showPassword} />
             </button>
@@ -87,7 +87,7 @@ const RegistrationForm = () => {
           <div className="relative">
             <RHFInput
               name="password_confirmation"
-              type={showPassword ? 'text' : 'password'}
+              type={showConfirmPassword ? 'text' : 'password'}
               placeholder="Confirm Password"
               isRequired
               inputClassName="w-full px-3.5  py-2 rounded-lg"
@@ -95,10 +95,10 @@ const RegistrationForm = () => {
 
             <button
               type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute top-1/2 right-3 -translate-y-1/2"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer"
             >
-              <EyeIcon isPasswordVisible={showPassword} />
+              <EyeIcon isPasswordVisible={showConfirmPassword} />
             </button>
           </div>
         </div>

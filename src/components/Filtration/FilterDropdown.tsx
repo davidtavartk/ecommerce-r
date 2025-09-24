@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Popover, Button as AriaButton, DialogTrigger } from 'react-aria-components';
 import { RHFInput } from '@/components/common/Input/Input';
 import Button from '@/components/common/Button/Button';
@@ -9,20 +9,29 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 interface FilterDropdownProps {
   onApplyFilter: (priceFrom: string, priceTo: string) => void;
+  currentPriceFrom?: string;
+  currentPriceTo?: string;
 }
 
-const FilterDropdown = ({ onApplyFilter }: FilterDropdownProps) => {
+const FilterDropdown = ({ onApplyFilter, currentPriceFrom, currentPriceTo }: FilterDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const methods = useForm<FilterFormData>({
-    resolver: zodResolver(filterSchema),
+    resolver: isEditing ? undefined : zodResolver(filterSchema),
+    mode: 'onSubmit',
     defaultValues: {
-      priceFrom: '',
-      priceTo: '',
+      priceFrom: currentPriceFrom || '',
+      priceTo: currentPriceTo || '',
     },
   });
 
   const { handleSubmit } = methods;
+
+  useEffect(() => {
+    methods.setValue('priceFrom', currentPriceFrom || '');
+    methods.setValue('priceTo', currentPriceTo || '');
+  }, [currentPriceFrom, currentPriceTo, methods]);
 
   const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
@@ -36,14 +45,48 @@ const FilterDropdown = ({ onApplyFilter }: FilterDropdownProps) => {
     target.value = target.value.replace(/[^0-9]/g, '');
   };
 
+  const handleInputChange = (e: React.FormEvent<HTMLInputElement>) => {
+    handleInput(e);
+
+    setIsEditing(true);
+
+    // errors are cleared after any validation
+    setTimeout(() => {
+      methods.clearErrors();
+    }, 0);
+  };
+
+  const handlePopoverChange = (open: boolean) => {
+    setIsOpen(open);
+
+    if (!open) {
+      setIsEditing(false);
+      methods.clearErrors();
+      methods.setValue('priceFrom', currentPriceFrom || '');
+      methods.setValue('priceTo', currentPriceTo || '');
+    }
+  };
+
   const onSubmit = (data: FilterFormData) => {
+    setIsEditing(false);
+
+    const result = filterSchema.safeParse(data);
+    if (!result.success) {
+      result.error.issues.forEach((issue) => {
+        methods.setError(issue.path[0] as keyof FilterFormData, {
+          message: issue.message,
+        });
+      });
+      return;
+    }
+
     onApplyFilter(data.priceFrom, data.priceTo);
     setIsOpen(false);
   };
 
   return (
     <DialogTrigger>
-      <AriaButton className="flex cursor-pointer items-center gap-2" onPress={() => setIsOpen(!isOpen)}>
+      <AriaButton className="flex cursor-pointer items-center gap-2" onPress={() => handlePopoverChange(!isOpen)}>
         <Image
           src="/svgs/filter-icon.svg"
           alt="Filter"
@@ -57,7 +100,7 @@ const FilterDropdown = ({ onApplyFilter }: FilterDropdownProps) => {
 
       <Popover
         isOpen={isOpen}
-        onOpenChange={setIsOpen}
+        onOpenChange={handlePopoverChange}
         className="border-l-gray rounded-lg border bg-white p-4"
         placement="bottom end"
         crossOffset={16}
@@ -73,7 +116,7 @@ const FilterDropdown = ({ onApplyFilter }: FilterDropdownProps) => {
                     name="priceFrom"
                     placeholder="From"
                     type="number"
-                    onInput={handleInput}
+                    onInput={handleInputChange}
                     isRequired
                     inputClassName="w-full px-3.5 py-2.5 rounded-lg"
                   />
@@ -84,7 +127,7 @@ const FilterDropdown = ({ onApplyFilter }: FilterDropdownProps) => {
                     name="priceTo"
                     placeholder="To"
                     type="number"
-                    onInput={handleInput}
+                    onInput={handleInputChange}
                     isRequired
                     inputClassName="w-full px-3.5 py-2.5 rounded-lg"
                   />

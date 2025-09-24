@@ -12,7 +12,6 @@ export const filterSchema = z
   if (!(from > 0 && to > 0 && from < to)) {
     const message = "Price 'from' must be less than 'to' and both must be positive";
     
-    // Add error to priceFrom (where message displays)
     ctx.addIssue({
       code: 'custom',
       message,
@@ -22,7 +21,7 @@ export const filterSchema = z
     // Add error to priceTo (for red border only) with a special marker
     ctx.addIssue({
       code: 'custom',
-      message: '__NO_DISPLAY__', // Special marker for no display
+      message: '__NO_DISPLAY__',
       path: ['priceTo'],
     });
   }

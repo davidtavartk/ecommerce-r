@@ -1,7 +1,16 @@
 import Filtration from '@/components/Filtration/Filtration';
 import { ProductHeaderProps } from '@/types/propTypes';
 
-const ProductHeader = ({ from, to, total, currentSort, onApplyFilter, onSortChange }: ProductHeaderProps) => {
+const ProductHeader = ({
+  from,
+  to,
+  total,
+  currentSort,
+  currentPriceFrom,
+  currentPriceTo,
+  onApplyFilter,
+  onSortChange,
+}: ProductHeaderProps) => {
   return (
     <header>
       <div className="flex items-center justify-between">
@@ -13,6 +22,8 @@ const ProductHeader = ({ from, to, total, currentSort, onApplyFilter, onSortChan
             to={to}
             total={total}
             currentSort={currentSort}
+            currentPriceFrom={currentPriceFrom}
+            currentPriceTo={currentPriceTo}
             onApplyFilter={onApplyFilter}
             onSortChange={onSortChange}
           />

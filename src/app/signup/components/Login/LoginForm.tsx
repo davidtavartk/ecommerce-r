@@ -32,11 +32,9 @@ const LoginForm = () => {
     try {
       const response = await authService.login(data);
       login(response.token, response.user);
-      console.log('Login response:', response);
 
       router.push('/');
     } catch (err: any) {
-      // console.log('Error', err);
       if (err.data?.errors) {
         Object.keys(err.data.errors).forEach((field) => {
           methods.setError(field as keyof LoginFormData, {

@@ -9,7 +9,6 @@ import Pagination from '@/components/common/Pagination/Pagination';
 import { useRouter, useSearchParams } from 'next/navigation';
 import ProductCardSkeleton from '@/components/Product/ProductCard/ProductCardSkeleton';
 
-
 export default function Home() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -99,6 +98,8 @@ export default function Home() {
         to={meta?.to}
         total={meta?.total}
         currentSort={filters.sortBy}
+        currentPriceFrom={filters.priceFrom}
+        currentPriceTo={filters.priceTo}
         onApplyFilter={handleFilterApply}
         onSortChange={handleSortChange}
       />

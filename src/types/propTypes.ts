@@ -10,6 +10,8 @@ export interface ProductHeaderProps {
   to?: number;
   total?: number;
   currentSort?: string;
+  currentPriceFrom?: string;
+  currentPriceTo?: string;
   onApplyFilter?: (priceFrom: string, priceTo: string) => void;
   onSortChange?: (sortType: string) => void;
 }
@@ -21,6 +23,8 @@ export interface FiltrationProps {
   onApplyFilter?: (priceFrom: string, priceTo: string) => void;
   onSortChange?: (sortType: string) => void;
   currentSort?: string;
+  currentPriceFrom?: string;
+  currentPriceTo?: string;
 }
 
 export interface CartItemProps {

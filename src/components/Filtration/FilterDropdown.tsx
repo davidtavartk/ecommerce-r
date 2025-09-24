@@ -33,16 +33,28 @@ const FilterDropdown = ({ onApplyFilter, currentPriceFrom, currentPriceTo }: Fil
     methods.setValue('priceTo', currentPriceTo || '');
   }, [currentPriceFrom, currentPriceTo, methods]);
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Prevent these characters from being typed
+    const forbiddenKeys = ['-', '+', '.', 'e', 'E', ','];
+
+    if (forbiddenKeys.includes(e.key)) {
+      e.preventDefault();
+    }
+  };
+
   const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
+    let value = target.value;
 
-    // If input starts with 0, replace it entirely
-    if (target.value.startsWith('0')) {
-      target.value = target.value.replace(/^0+/, '');
+    // Clean up any forbidden characters that might have slipped through
+    value = value.replace(/[^0-9]/g, '');
+
+    // Remove leading zeros
+    if (value.startsWith('0') && value.length > 1) {
+      value = value.replace(/^0+/, '');
     }
 
-    // Remove any non-digit characters
-    target.value = target.value.replace(/[^0-9]/g, '');
+    target.value = value;
   };
 
   const handleInputChange = (e: React.FormEvent<HTMLInputElement>) => {
@@ -117,7 +129,7 @@ const FilterDropdown = ({ onApplyFilter, currentPriceFrom, currentPriceTo }: Fil
                     placeholder="From"
                     type="number"
                     onInput={handleInputChange}
-                    isRequired
+                    onKeyDown={handleKeyDown}
                     inputClassName="w-full px-3.5 py-2.5 rounded-lg"
                   />
                 </div>
@@ -128,7 +140,7 @@ const FilterDropdown = ({ onApplyFilter, currentPriceFrom, currentPriceTo }: Fil
                     placeholder="To"
                     type="number"
                     onInput={handleInputChange}
-                    isRequired
+                    onKeyDown={handleKeyDown}
                     inputClassName="w-full px-3.5 py-2.5 rounded-lg"
                   />
                 </div>

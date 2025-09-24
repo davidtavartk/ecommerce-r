@@ -35,9 +35,15 @@ export default function Home() {
         page: page.toString(),
       });
 
-      if (filterParams.priceFrom) params.append('filter[price_from]', filterParams.priceFrom);
-      if (filterParams.priceTo) params.append('filter[price_to]', filterParams.priceTo);
-      if (filterParams.sortBy) params.append('sort', filterParams.sortBy);
+      if (filterParams.priceFrom && filterParams.priceFrom.trim()) {
+        params.append('filter[price_from]', filterParams.priceFrom);
+      }
+      if (filterParams.priceTo && filterParams.priceTo.trim()) {
+        params.append('filter[price_to]', filterParams.priceTo);
+      }
+      if (filterParams.sortBy) {
+        params.append('sort', filterParams.sortBy);
+      }
 
       const response = await productService.getAllProducts(params.toString());
 

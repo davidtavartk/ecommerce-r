@@ -9,6 +9,7 @@ type InternalInputProps = {
   inputClassName?: string;
   isRequired?: boolean;
   onInput?: (e: React.FormEvent<HTMLInputElement>) => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 } & InputProps;
 
 // Reusable component that can be used when we don't need to use react-hook-form
@@ -19,6 +20,7 @@ export const Input = ({
   value,
   onChange,
   onInput,
+  onKeyDown,
   containerClassName = '',
   inputClassName = '',
   type = 'text',
@@ -48,6 +50,7 @@ export const Input = ({
           value={value ?? ''}
           onChange={handleChange}
           onInput={onInput}
+          onKeyDown={onKeyDown}
           aria-label={name}
           placeholder={!isRequired ? placeholder : ''}
           className={twMerge(baseInputStyles, inputClassName)}

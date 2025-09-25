@@ -50,8 +50,13 @@ const CartContent = ({
     <div className="flex h-full flex-col gap-6">
       {/* Cart Items List */}
       <div className={twMerge(`flex flex-col gap-9 overflow-scroll ${itemContainerClasses}`)}>
-        {items.map((item) => (
-          <CartItem key={item.id} product={item} onUpdateQuantity={updateCartItem} onRemove={removeFromCart} />
+        {items.map((item, index) => (
+          <CartItem
+            key={`${item.id}-${item.color}-${item.size}-${index}`}
+            product={item}
+            onUpdateQuantity={updateCartItem}
+            onRemove={removeFromCart}
+          />
         ))}
       </div>
 

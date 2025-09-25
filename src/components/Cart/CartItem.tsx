@@ -9,16 +9,18 @@ import { CartItemProps } from '@/types/propTypes';
 
 const CartItem = ({ product, onUpdateQuantity, onRemove }: CartItemProps) => {
   const [localQuantity, setLocalQuantity] = useState(product.quantity);
-  const debouncedQuantity = useDebounce(localQuantity, 200); // 200ms delay
+  const debouncedQuantity = useDebounce(localQuantity, 200);
 
   useEffect(() => {
     if (debouncedQuantity !== product.quantity && onUpdateQuantity) {
       onUpdateQuantity(product.id, debouncedQuantity);
     }
-  }, [debouncedQuantity, product.id, product.quantity, onUpdateQuantity]);
+  }, [debouncedQuantity, product.id, onUpdateQuantity]);
 
   useEffect(() => {
-    setLocalQuantity(product.quantity);
+    if (localQuantity !== product.quantity) {
+      setLocalQuantity(product.quantity);
+    }
   }, [product.quantity]);
 
   const handleDecrease = () => {

@@ -47,7 +47,6 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
       await addToCart(product.id, quantity, selectedColor, selectedSize);
       toast.success('Product added to cart successfully!');
     } catch (error: any) {
-      console.error('Failed to add to cart:', error);
       const errorMessage = error?.data?.message || error?.message || 'Failed to add to cart. Please try again.';
       toast.error(errorMessage);
     }
@@ -69,7 +68,9 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
               className="cursor-pointer object-cover"
               onClick={() => {
                 setSelectedImageIndex(index);
-                setSelectedColor(product.available_colors?.[index] || '');
+                if (product.available_colors?.[index]) {
+                  setSelectedColor(product.available_colors[index]);
+                }
               }}
               style={{ width: 'auto', height: 'auto' }}
             />
@@ -115,9 +116,11 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
                       <span
                         key={color}
                         onClick={() => {
-                          const colorIndex = product.available_colors.indexOf(color);
                           setSelectedColor(color);
-                          setSelectedImageIndex(colorIndex);
+                          const colorIndex = product.available_colors.indexOf(color);
+                          if (colorIndex !== -1 && colorIndex < product.images.length) {
+                            setSelectedImageIndex(colorIndex);
+                          }
                         }}
                         className={`size-[38px] cursor-pointer rounded-full transition-all ${
                           isSelected ? 'ring-l-gray ring-2 ring-offset-2' : ''

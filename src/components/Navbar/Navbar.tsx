@@ -49,6 +49,7 @@ const Navbar = () => {
                         width={40}
                         height={40}
                         className="aspect-square rounded-full object-cover"
+                        priority
                       />
                     ) : (
                       <span className="text-xs font-bold text-gray-600">{user?.username?.charAt(0).toUpperCase()}</span>

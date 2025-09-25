@@ -70,6 +70,9 @@ export interface CartItem {
   price: number;
   cover_image: string;
   name: string;
+  images: string[];
+  available_colors: string[];
+  available_sizes: string[];
 }
 
 export interface CartResponse {
@@ -87,8 +90,8 @@ export interface CartState {
   updateLoading: boolean;
   fetchCart: (silent?: boolean) => Promise<void>;
   addToCart: (productId: number, quantity: number, color: string, size: string) => Promise<void>;
-  updateCartItem: (itemId: number, quantity: number, color?: string, size?: string) => Promise<void>;
-  removeFromCart: (itemId: number) => Promise<void>;
+  updateCartItem: (itemId: number, quantity: number, color: string, size: string) => Promise<void>;
+  removeFromCart: (itemId: number, color: string, size: string) => Promise<void>;
   checkout: (checkoutData: CheckoutFormData) => Promise<void>;
   toggleCart: () => void;
 }

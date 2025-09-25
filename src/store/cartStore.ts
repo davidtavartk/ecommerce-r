@@ -52,9 +52,11 @@ export const useCartStore = create<CartState>((set, get) => ({
     }
   },
 
-  updateCartItem: async (itemId: number, quantity: number) => {
+  updateCartItem: async (itemId: number, quantity: number, color: string, size: string) => {
     const currentItems = get().items;
-    const updatedItems = currentItems.map((item) => (item.id === itemId ? { ...item, quantity } : item));
+    const updatedItems = currentItems.map((item) =>
+      item.id === itemId && item.color === color && item.size === size ? { ...item, quantity } : item,
+    );
 
     const newTotalQuantity = updatedItems.reduce((sum, item) => sum + item.quantity, 0);
     const newTotalPrice = updatedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -66,7 +68,7 @@ export const useCartStore = create<CartState>((set, get) => ({
     });
 
     try {
-      const cartItem = currentItems.find((item) => item.id === itemId);
+      const cartItem = currentItems.find((item) => item.id === itemId && item.color === color && item.size === size);
       if (!cartItem) {
         throw new Error('Cart item not found');
       }
@@ -82,16 +84,18 @@ export const useCartStore = create<CartState>((set, get) => ({
     }
   },
 
-  removeFromCart: async (itemId: number) => {
+  removeFromCart: async (itemId: number, color: string, size: string) => {
     try {
-      const cartItem = get().items.find((item) => item.id === itemId);
+      const cartItem = get().items.find((item) => item.id === itemId && item.color === color && item.size === size);
+
       if (!cartItem) {
         throw new Error('Cart item not found');
       }
 
-      await cartService.removeFromCart(cartItem.id);
+      await cartService.removeFromCart(cartItem.id, cartItem.color, cartItem.size);
 
-      const updatedItems = get().items.filter((item) => item.id !== itemId);
+      const updatedItems = get().items.filter((item) => !(item.id === itemId && item.color === color && item.size === size));
+
       const newTotalQuantity = updatedItems.reduce((sum, item) => sum + item.quantity, 0);
       const newTotalPrice = updatedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 

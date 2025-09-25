@@ -23,7 +23,14 @@ export const cartService = {
       }),
     }),
 
-  removeFromCart: (productId: number) => apiRequest<CartResponse>(`/cart/products/${productId}`, { method: 'DELETE' }),
+  removeFromCart: (productId: number, color: string, size: string) =>
+    apiRequest<CartResponse>(`/cart/products/${productId}`, {
+      method: 'DELETE',
+      body: JSON.stringify({
+        color,
+        size,
+      }),
+    }),
 
   checkoutCart: (checkoutData: CheckoutFormData) =>
     apiRequest('/cart/checkout', {
@@ -33,6 +40,6 @@ export const cartService = {
 
   clearAllItems: async () => {
     const cartItems = await cartService.getCart();
-    await Promise.all(cartItems.map((item) => cartService.removeFromCart(item.id)));
+    await Promise.all(cartItems.map((item) => cartService.removeFromCart(item.id, item.color, item.size)));
   },
 };

@@ -13,15 +13,25 @@ const CartItem = ({ product, onUpdateQuantity, onRemove }: CartItemProps) => {
 
   useEffect(() => {
     if (debouncedQuantity !== product.quantity && onUpdateQuantity) {
-      onUpdateQuantity(product.id, debouncedQuantity);
+      onUpdateQuantity(product.id, debouncedQuantity, product.color, product.size);
     }
-  }, [debouncedQuantity, product.id, onUpdateQuantity]);
+  }, [debouncedQuantity, product.id, product.quantity, product.color, product.size, onUpdateQuantity]);
 
   useEffect(() => {
     if (localQuantity !== product.quantity) {
       setLocalQuantity(product.quantity);
     }
   }, [product.quantity]);
+
+  const getImageForColor = (item: CartItem) => {
+    if (item.images && item.available_colors) {
+      const colorIndex = item.available_colors.indexOf(item.color);
+      if (colorIndex !== -1 && item.images[colorIndex]) {
+        return item.images[colorIndex];
+      }
+    }
+    return item.cover_image;
+  };
 
   const handleDecrease = () => {
     if (localQuantity > 1) {
@@ -37,7 +47,7 @@ const CartItem = ({ product, onUpdateQuantity, onRemove }: CartItemProps) => {
     <div className="flex gap-[17px]">
       <div>
         <Image
-          src={product.cover_image}
+          src={getImageForColor(product)}
           alt={product.name}
           width={100}
           height={134}
@@ -53,7 +63,7 @@ const CartItem = ({ product, onUpdateQuantity, onRemove }: CartItemProps) => {
             <span className="text-l-blue text-xs">{product.color}</span>
             <span className="text-l-blue text-xs">{product.size}</span>
           </div>
-          <span className="text-lg font-medium">$ {(product.price * localQuantity)}</span>
+          <span className="text-lg font-medium">$ {product.price * localQuantity}</span>
         </div>
 
         {/* Quantity Controls */}
@@ -68,7 +78,7 @@ const CartItem = ({ product, onUpdateQuantity, onRemove }: CartItemProps) => {
             </button>
           </div>
 
-          <button className="cursor-pointer text-xs" onClick={() => onRemove?.(product.id)}>
+          <button className="cursor-pointer text-xs" onClick={() => onRemove?.(product.id, product.color, product.size)}>
             Remove
           </button>
         </div>

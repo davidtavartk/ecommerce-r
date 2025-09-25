@@ -29,6 +29,6 @@ export interface FiltrationProps {
 
 export interface CartItemProps {
   product: CartItem;
-  onUpdateQuantity?: (itemId: number, newQuantity: number) => void;
-  onRemove?: (itemId: number) => void;
+  onUpdateQuantity?: (itemId: number, newQuantity: number, color: string, size: string) => void;
+  onRemove?: (itemId: number, color: string, size: string) => void;
 }

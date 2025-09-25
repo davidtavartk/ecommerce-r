@@ -100,6 +100,12 @@ export const useCartStore = create<CartState>((set, get) => ({
         totalQuantity: newTotalQuantity,
         totalPrice: newTotalPrice,
       });
+
+      if (updatedItems.length === 0) {
+        if (typeof window !== 'undefined' && window.location.pathname === '/checkout') {
+          window.location.href = '/';
+        }
+      }
     } catch (error) {
       throw error;
     }

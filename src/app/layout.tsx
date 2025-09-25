@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import '../styles/globals.css';
 import Navbar from '@/components/Navbar/Navbar';
 import AuthLoader from '@/components/common/Loading/AuthLoader/AuthLoader';
+import { ToastContainer } from 'react-toastify';
 
 export const metadata: Metadata = {
   title: 'RedSeam Clothing',
@@ -21,6 +22,7 @@ export default function RootLayout({
             <Navbar />
             {children}
           </AuthLoader>
+          <ToastContainer position='bottom-right' pauseOnHover={false} />
         </div>
       </body>
     </html>

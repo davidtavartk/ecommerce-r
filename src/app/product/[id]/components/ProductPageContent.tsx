@@ -10,6 +10,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button as AriaButton, Popover, DialogTrigger } from 'react-aria-components';
+import { toast } from 'react-toastify';
 
 interface ProductPageContentProps {
   product: Product;
@@ -17,11 +18,10 @@ interface ProductPageContentProps {
 
 export default function ProductPageContent({ product }: ProductPageContentProps) {
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
-  const [selectedColor, setSelectedColor] = useState<string>(product.available_colors[0] || '');
-  const [selectedSize, setSelectedSize] = useState<string>(product.available_sizes[0] || '');
+  const [selectedColor, setSelectedColor] = useState<string>(product.available_colors?.[0] || '');
+  const [selectedSize, setSelectedSize] = useState<string>(product.available_sizes?.[0] || '');
   const [quantity, setQuantity] = useState<number>(1);
   const [isQuantityOpen, setIsQuantityOpen] = useState(false);
-  // const [isLoading, setIsLoading] = useState(false);
 
   const { addToCart, loading: cartLoading } = useCartStore();
   const { isAuthenticated } = useAuthStore();
@@ -33,18 +33,23 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
       return;
     }
 
+    if (!product.available_colors?.length || !product.available_sizes?.length) {
+      toast.error('This product does not have available colors or sizes.');
+      return;
+    }
+
     if (!selectedColor || !selectedSize) {
-      alert('Please select both color and size before adding to cart');
+      toast.error('Please select both color and size before adding to cart');
       return;
     }
 
     try {
       await addToCart(product.id, quantity, selectedColor, selectedSize);
-      alert('✅ Product added to cart successfully!');
+      toast.success('Product added to cart successfully!');
     } catch (error: any) {
       console.error('Failed to add to cart:', error);
       const errorMessage = error?.data?.message || error?.message || 'Failed to add to cart. Please try again.';
-      alert(`❌ ${errorMessage}`);
+      toast.error(errorMessage);
     }
   };
 
@@ -61,10 +66,10 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
               alt={`Product Image ${index + 1}`}
               width={121}
               height={121}
-              className="object-cover cursor-pointer"
+              className="cursor-pointer object-cover"
               onClick={() => {
                 setSelectedImageIndex(index);
-                setSelectedColor(product.available_colors[index] || '');
+                setSelectedColor(product.available_colors?.[index] || '');
               }}
               style={{ width: 'auto', height: 'auto' }}
             />
@@ -98,45 +103,53 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
             <div className="flex flex-col gap-4">
               <span>Colors:</span>
 
-              <span className="flex items-center gap-[13px]">
-                {product.available_colors.map((color) => {
-                  const colorHex = colors[color as keyof typeof colors];
-                  const isSelected = selectedColor === color;
+              {!product.available_colors?.length ? (
+                <span className="font-medium text-red-600">Colors not available</span>
+              ) : (
+                <span className="flex items-center gap-[13px]">
+                  {product.available_colors.map((color) => {
+                    const colorHex = colors[color as keyof typeof colors];
+                    const isSelected = selectedColor === color;
 
-                  return (
-                    <span
-                      key={color}
-                      onClick={() => {
-                        const colorIndex = product.available_colors.indexOf(color);
-                        setSelectedColor(color);
-                        setSelectedImageIndex(colorIndex);
-                      }}
-                      className={`size-[38px] cursor-pointer rounded-full transition-all ${
-                        isSelected ? 'ring-l-gray ring-2 ring-offset-2' : ''
-                      } ${isWhiteColor(color) ? 'border-2 border-gray-300' : 'border-transparent'}`}
-                      style={{ backgroundColor: colorHex }}
-                    />
-                  );
-                })}
-              </span>
+                    return (
+                      <span
+                        key={color}
+                        onClick={() => {
+                          const colorIndex = product.available_colors.indexOf(color);
+                          setSelectedColor(color);
+                          setSelectedImageIndex(colorIndex);
+                        }}
+                        className={`size-[38px] cursor-pointer rounded-full transition-all ${
+                          isSelected ? 'ring-l-gray ring-2 ring-offset-2' : ''
+                        } ${isWhiteColor(color) ? 'border-2 border-gray-300' : 'border-transparent'}`}
+                        style={{ backgroundColor: colorHex }}
+                      />
+                    );
+                  })}
+                </span>
+              )}
             </div>
             {/* Size */}
             <div className="flex flex-col gap-4">
-              <span>Size: {selectedSize}</span>
-              <div className="flex gap-2">
-                {product.available_sizes.map((size) => {
-                  const isSelected = selectedSize === size;
-                  return (
-                    <span
-                      key={size}
-                      onClick={() => setSelectedSize(size)}
-                      className={`flex w-[70px] cursor-pointer items-center justify-center rounded-[10px] border px-4 py-[9px] ${isSelected ? 'border-red bg-[#F8F6F7]' : 'border-l-gray'}`}
-                    >
-                      {size}
-                    </span>
-                  );
-                })}
-              </div>
+              <span>Size: {selectedSize || 'Not selected'}</span>
+              {!product.available_sizes?.length ? (
+                <span className="font-medium text-red-600">Sizes not available</span>
+              ) : (
+                <div className="flex gap-2">
+                  {product.available_sizes.map((size) => {
+                    const isSelected = selectedSize === size;
+                    return (
+                      <span
+                        key={size}
+                        onClick={() => setSelectedSize(size)}
+                        className={`flex w-[70px] cursor-pointer items-center justify-center rounded-[10px] border px-4 py-[9px] ${isSelected ? 'border-red bg-[#F8F6F7]' : 'border-l-gray'}`}
+                      >
+                        {size}
+                      </span>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
             {/* Quantity */}
@@ -178,11 +191,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
             </div>
           </div>
           {/* Button */}
-          <Button
-            className={`py-4 ${cartLoading ? 'opacity-75' : ''}`}
-            onClick={handleAddToCart}
-            disabled={cartLoading || !selectedColor || !selectedSize}
-          >
+          <Button className={`py-4 ${cartLoading ? 'opacity-75' : ''}`} onClick={handleAddToCart} disabled={cartLoading}>
             {cartLoading ? (
               <>
                 <div className="h-6 w-6 animate-spin rounded-full border-2 border-white border-t-transparent"></div>

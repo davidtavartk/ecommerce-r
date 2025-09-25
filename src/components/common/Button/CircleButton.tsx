@@ -10,7 +10,14 @@ const CircleButton = ({ photoSrc, size = 100, onClick, children }: CircleButtonP
       type="button"
     >
       {photoSrc ? (
-        <Image src={photoSrc} alt="avatar" width={size} height={size} className="aspect-square rounded-full object-cover" priority/>
+        <Image
+          src={photoSrc}
+          alt="avatar"
+          width={size}
+          height={size}
+          className="aspect-square rounded-full object-cover"
+          priority
+        />
       ) : (
         children
       )}

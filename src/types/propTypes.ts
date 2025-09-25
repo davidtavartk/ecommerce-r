@@ -32,3 +32,10 @@ export interface CartItemProps {
   onUpdateQuantity?: (itemId: number, newQuantity: number, color: string, size: string) => void;
   onRemove?: (itemId: number, color: string, size: string) => void;
 }
+
+export interface CartContentProps {
+  onCheckoutClick: () => void;
+  checkoutButtonText?: string;
+  summaryContainerClasses?: string;
+  itemContainerClasses?: string;
+}

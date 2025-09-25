@@ -6,12 +6,7 @@ import Image from 'next/image';
 import { FilterFormData, filterSchema } from './schema';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-
-interface FilterDropdownProps {
-  onApplyFilter: (priceFrom: string, priceTo: string) => void;
-  currentPriceFrom?: string;
-  currentPriceTo?: string;
-}
+import { FilterDropdownProps } from '../common/types/propTypes';
 
 const FilterDropdown = ({ onApplyFilter, currentPriceFrom, currentPriceTo }: FilterDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);

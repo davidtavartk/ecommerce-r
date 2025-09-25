@@ -42,7 +42,6 @@ export async function apiRequest<T>(endpoint: string, options: RequestInit = {})
     (error as any).data = errorData;
 
     if (response.status === 401) {
-      
       if (typeof window !== 'undefined') {
         document.cookie = 'accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
         localStorage.removeItem('user');

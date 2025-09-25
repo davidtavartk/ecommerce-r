@@ -7,34 +7,35 @@ This application provides a complete online shopping experience with product bro
 
 ## ✨ Features
 
-- **Product Catalog** – Browse products with pagination and grid layout  
-- **Advanced Filtering** – Filter products by price range with real-time validation  
-- **Product Sorting** – Sort by price (low to high, high to low) and newest first  
-- **Product Details** – Detailed product pages with image galleries, color/size selection  
-- **Shopping Cart** – Add products to cart with variants, manage quantities, and checkout  
-- **User Authentication** – Register and login with avatar upload support  
-- **Responsive Design** – Fully responsive layout that works on all devices  
-- **Form Validation** – Comprehensive form validation with user-friendly error handling  
+- **Product Catalog** – Browse products with pagination and grid layout
+- **Advanced Filtering** – Filter products by price range with real-time validation
+- **Product Sorting** – Sort by price (low to high, high to low) and newest first
+- **Product Details** – Detailed product pages with image galleries, color/size selection
+- **Shopping Cart** – Add products to cart with variants, manage quantities, and checkout
+- **User Authentication** – Register and login with avatar upload support
+- **Responsive Design** – Fully responsive layout that works on all devices
+- **Form Validation** – Comprehensive form validation with user-friendly error handling
 - **URL State Management** – Filters and pagination persist in URL
 
 ---
 
 ## 🛠 Tech Stack
 
-- **Next.js** 
+- **Next.js**
 - **React**
 - **TypeScript**
 - **Tailwind CSS 4**
-- **React Hook Form** – Form handling and validation  
-- **Zod** – Schema validation  
-- **Zustand** – State management  
-- **React Aria Components** – Accessible UI components (Headless) 
+- **React Hook Form** – Form handling and validation
+- **Zod** – Schema validation
+- **Zustand** – State management
+- **React Aria Components** – Accessible UI components (Headless)
 
 ---
 
 ## Getting Started
 
 ### Prerequisites
+
 Make sure you have **Node.js 18 or higher** installed.
 
 ### Installation
@@ -43,6 +44,8 @@ Make sure you have **Node.js 18 or higher** installed.
    ```bash
    git clone https://github.com/davidtavartk/ecommerce-r
    cd ecommerce-r
+   ```
+
 ````
 
 2. Install dependencies:
@@ -97,3 +100,4 @@ It is done with a constant defined in apiClient.ts, since this project is not pr
 * Next.js **Image component** is used for optimized performance
 
 ### Website is built for 1920x1080 - non-responsive design
+````

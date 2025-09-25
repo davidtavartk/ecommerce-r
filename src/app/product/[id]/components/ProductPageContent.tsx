@@ -233,5 +233,3 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
     </div>
   );
 }
-{
-}

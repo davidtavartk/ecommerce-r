@@ -3,11 +3,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { Button as AriaButton, Popover } from 'react-aria-components';
 import { DialogTrigger } from 'react-aria-components';
-
-interface SortDropdownProps {
-  onSortChange: (sortType: string) => void;
-  currentSort?: string;
-}
+import { SortDropdownProps } from '../common/types/propTypes';
 
 const SortDropdown = ({ onSortChange, currentSort }: SortDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);

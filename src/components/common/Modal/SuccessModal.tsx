@@ -3,12 +3,7 @@
 import { Modal, ModalOverlay, Dialog } from 'react-aria-components';
 import Button from '../Button/Button';
 import Image from 'next/image';
-
-interface SuccessModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onContinueShopping: () => void;
-}
+import { SuccessModalProps } from '../types/propTypes';
 
 const SuccessModal = ({ isOpen, onClose, onContinueShopping }: SuccessModalProps) => {
   return (

@@ -22,7 +22,7 @@ export default function RootLayout({
             <Navbar />
             {children}
           </AuthLoader>
-          <ToastContainer position='bottom-right' pauseOnHover={false} autoClose={2000} />
+          <ToastContainer position="bottom-right" pauseOnHover={false} autoClose={2000} />
         </div>
       </body>
     </html>

@@ -4,11 +4,7 @@ import { useState, useRef } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import Image from 'next/image';
 import CircleButton from '../Button/CircleButton';
-
-interface AvatarInputProps {
-  name: string;
-  size?: number;
-}
+import { AvatarInputProps } from '../types/propTypes';
 
 export const RHFAvatarInput = ({ name, size = 88 }: AvatarInputProps) => {
   const { control } = useFormContext();
@@ -42,7 +38,7 @@ export const RHFAvatarInput = ({ name, size = 88 }: AvatarInputProps) => {
       name={name}
       control={control}
       render={({ field: { onChange } }) => (
-        <div className='flex gap-5 items-center'>
+        <div className="flex items-center gap-5">
           <div className="flex cursor-pointer items-center gap-4" onClick={handleClick}>
             <CircleButton photoSrc={preview || undefined} size={size}>
               <Image src="/svgs/camera-icon.svg" alt="upload" width={24} height={24} />

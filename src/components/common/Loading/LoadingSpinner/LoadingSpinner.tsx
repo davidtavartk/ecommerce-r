@@ -1,9 +1,5 @@
 import { twMerge } from 'tailwind-merge';
-
-interface LoadingSpinnerProps {
-  size?: 'sm' | 'md' | 'lg';
-  className?: string;
-}
+import { LoadingSpinnerProps } from '../../types/propTypes';
 
 const LoadingSpinner = ({ size = 'md', className }: LoadingSpinnerProps) => {
   const sizeClasses = {

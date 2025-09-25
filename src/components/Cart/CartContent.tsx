@@ -6,13 +6,7 @@ import Button from '../common/Button/Button';
 import CartItem from './CartItem';
 import LoadingSpinner from '../common/Loading/LoadingSpinner/LoadingSpinner';
 import { twMerge } from 'tailwind-merge';
-
-interface CartContentProps {
-  onCheckoutClick: () => void;
-  checkoutButtonText?: string;
-  summaryContainerClasses?: string;
-  itemContainerClasses?: string;
-}
+import { CartContentProps } from '@/types/propTypes';
 
 const CartContent = ({
   onCheckoutClick,

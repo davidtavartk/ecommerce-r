@@ -4,15 +4,22 @@ import { useCartStore } from '@/store/cartStore';
 import Image from 'next/image';
 import CartContent from './CartContent';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 const CartSidebar = () => {
   const router = useRouter();
-  const { totalQuantity, isOpen, toggleCart } = useCartStore();
+  const { totalQuantity, isOpen, toggleCart, fetchCart } = useCartStore();
 
   const handleCheckoutClick = () => {
     toggleCart();
     router.push('/checkout');
   };
+
+  useEffect(() => {
+    if (isOpen) {
+      fetchCart();
+    }
+  }, [isOpen, fetchCart]);
 
   if (!isOpen) return null;
 

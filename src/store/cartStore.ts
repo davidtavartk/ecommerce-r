@@ -100,6 +100,12 @@ export const useCartStore = create<CartState>((set, get) => ({
         totalQuantity: newTotalQuantity,
         totalPrice: newTotalPrice,
       });
+
+      if (updatedItems.length === 0) {
+        if (typeof window !== 'undefined' && window.location.pathname === '/checkout') {
+          window.location.href = '/';
+        }
+      }
     } catch (error) {
       throw error;
     }
@@ -124,6 +130,13 @@ export const useCartStore = create<CartState>((set, get) => ({
   },
 
   toggleCart: () => {
-    set({ isOpen: !get().isOpen });
+    const currentState = get();
+    const newIsOpen = !currentState.isOpen;
+
+    set({ isOpen: newIsOpen });
+
+    if (newIsOpen) {
+      get().fetchCart(true);
+    }
   },
 }));

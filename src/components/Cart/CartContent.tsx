@@ -20,7 +20,7 @@ const CartContent = ({
   summaryContainerClasses,
   itemContainerClasses = 'h-[560px]',
 }: CartContentProps) => {
-  const { items, loading, totalPrice, updateCartItem, removeFromCart } = useCartStore();
+  const { items, loading, totalPrice, updateCartItem, removeFromCart, toggleCart } = useCartStore();
 
   if (loading) {
     return (
@@ -39,7 +39,7 @@ const CartContent = ({
           <h2 className="text-2xl font-semibold">Ooops!</h2>
           <p className="text-sm">You&apos;ve got nothing in your cart just yet...</p>
         </div>
-        <Button className="mt-[58px] w-[214px] py-2.5" onClick={onCheckoutClick}>
+        <Button className="mt-[58px] w-[214px] py-2.5" onClick={toggleCart}>
           Continue Shopping
         </Button>
       </div>

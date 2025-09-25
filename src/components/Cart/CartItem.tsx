@@ -53,7 +53,7 @@ const CartItem = ({ product, onUpdateQuantity, onRemove }: CartItemProps) => {
             <span className="text-l-blue text-xs">{product.color}</span>
             <span className="text-l-blue text-xs">{product.size}</span>
           </div>
-          <span className="text-lg font-medium">$ {product.price}</span>
+          <span className="text-lg font-medium">$ {(product.price * localQuantity)}</span>
         </div>
 
         {/* Quantity Controls */}

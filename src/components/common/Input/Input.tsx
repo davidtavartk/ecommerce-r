@@ -8,6 +8,7 @@ type InternalInputProps = {
   containerClassName?: string;
   inputClassName?: string;
   isRequired?: boolean;
+  showRequiredIcon?: boolean;
   onInput?: (e: React.FormEvent<HTMLInputElement>) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 } & InputProps;
@@ -25,6 +26,7 @@ export const Input = ({
   inputClassName = '',
   type = 'text',
   isRequired = false,
+  showRequiredIcon = false,
 }: InternalInputProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (onChange) {
@@ -40,9 +42,10 @@ export const Input = ({
   return (
     <TextField aria-label={name} isInvalid={!!errorMessage} className={containerClassName}>
       <div className="relative">
-        {isRequired && placeholder && (value === '' || !value) && (
+        {placeholder && (value === '' || !value) && (
           <span className="text-l-blue pointer-events-none absolute top-1/2 left-4 z-10 -translate-y-1/2 transform text-sm">
             {placeholder}
+            {showRequiredIcon && <span className="text-c-orange"> *</span>}
           </span>
         )}
         <AriaInput
@@ -52,7 +55,7 @@ export const Input = ({
           onInput={onInput}
           onKeyDown={onKeyDown}
           aria-label={name}
-          placeholder={!isRequired ? placeholder : ''}
+          placeholder={!isRequired && !showRequiredIcon ? placeholder : ''}
           className={twMerge(baseInputStyles, inputClassName)}
         />
         {errorMessage && errorMessage.trim() && errorMessage !== '__NO_DISPLAY__' && (

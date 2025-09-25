@@ -126,6 +126,7 @@ const FilterDropdown = ({ onApplyFilter, currentPriceFrom, currentPriceTo }: Fil
                     onInput={handleInputChange}
                     onKeyDown={handleKeyDown}
                     inputClassName="w-full px-3.5 py-2.5 rounded-lg"
+                    showRequiredIcon
                   />
                 </div>
 
@@ -137,6 +138,7 @@ const FilterDropdown = ({ onApplyFilter, currentPriceFrom, currentPriceTo }: Fil
                     onInput={handleInputChange}
                     onKeyDown={handleKeyDown}
                     inputClassName="w-full px-3.5 py-2.5 rounded-lg"
+                    showRequiredIcon
                   />
                 </div>
               </div>

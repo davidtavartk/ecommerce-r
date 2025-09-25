@@ -51,7 +51,7 @@ const LoginForm = () => {
         <div className="flex flex-col gap-6">
           {/* Email */}
           <div>
-            <RHFInput name="email" placeholder="Email" isRequired inputClassName="w-full px-3.5  py-2 rounded-lg" />
+            <RHFInput name="email" placeholder="Email" isRequired inputClassName="w-full px-3.5  py-2 rounded-lg" showRequiredIcon />
           </div>
 
           {/* Password */}
@@ -62,6 +62,7 @@ const LoginForm = () => {
               placeholder="Password"
               isRequired
               inputClassName="w-full px-3.5  py-2 rounded-lg"
+              showRequiredIcon
             />
 
             <button

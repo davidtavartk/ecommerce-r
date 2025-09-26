@@ -5,6 +5,9 @@ This application provides a complete online shopping experience with product bro
 
 ---
 
+## Hosted Link
+https://ecommerce-r-rho.vercel.app
+
 ## ✨ Features
 
 - **Product Catalog** – Browse products with pagination and grid layout

@@ -28,6 +28,10 @@ const LoginForm = () => {
 
   const { handleSubmit } = methods;
 
+  const handleInputChange = () => {
+    methods.clearErrors();
+  };
+
   const onSubmit = async (data: LoginFormData) => {
     try {
       const response = await authService.login(data);
@@ -63,6 +67,7 @@ const LoginForm = () => {
               isRequired
               inputClassName="w-full px-3.5  py-2 rounded-lg"
               showRequiredIcon
+              onInput={handleInputChange}
             />
           </div>
 
@@ -75,6 +80,7 @@ const LoginForm = () => {
               isRequired
               inputClassName="w-full px-3.5  py-2 rounded-lg"
               showRequiredIcon
+              onInput={handleInputChange}
             />
 
             <button

@@ -7,6 +7,7 @@ import CartItem from './CartItem';
 import LoadingSpinner from '../common/Loading/LoadingSpinner/LoadingSpinner';
 import { twMerge } from 'tailwind-merge';
 import { CartContentProps } from '@/types/propTypes';
+import { useRouter } from 'next/navigation';
 
 const CartContent = ({
   onCheckoutClick,
@@ -15,6 +16,8 @@ const CartContent = ({
   itemContainerClasses = 'h-[560px]',
 }: CartContentProps) => {
   const { items, loading, totalPrice, updateCartItem, removeFromCart, toggleCart } = useCartStore();
+
+  const router = useRouter();
 
   if (loading) {
     return (
@@ -33,7 +36,16 @@ const CartContent = ({
           <h2 className="text-2xl font-semibold">Ooops!</h2>
           <p className="text-sm">You&apos;ve got nothing in your cart just yet...</p>
         </div>
-        <Button className="mt-[58px] w-[214px] py-2.5" onClick={toggleCart}>
+        <Button
+          className="mt-[58px] w-[214px] py-2.5"
+          onClick={() => {
+            if (typeof window !== 'undefined' && window.location.pathname === '/checkout') {
+              router.push('/');
+            } else {
+              toggleCart();
+            }
+          }}
+        >
           Continue Shopping
         </Button>
       </div>

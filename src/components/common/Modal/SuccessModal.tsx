@@ -14,7 +14,7 @@ const SuccessModal = ({ isOpen, onClose, onContinueShopping }: SuccessModalProps
           aria-label="Order confirmation"
         >
           {/* Close button */}
-          <button onClick={onClose} className="absolute top-10 right-10">
+          <button onClick={onClose} className="absolute top-10 right-10 cursor-pointer">
             <Image src="/svgs/x-icon.svg" alt="Close" width={40} height={40} />
           </button>
 

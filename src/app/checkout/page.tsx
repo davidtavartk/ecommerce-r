@@ -54,6 +54,7 @@ export default function CheckoutPage() {
 
   const handleCloseModal = () => {
     setShowSuccessModal(false);
+    router.push('/');
   };
 
   if (!isAuthenticated) {

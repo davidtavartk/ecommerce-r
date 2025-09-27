@@ -41,6 +41,12 @@ const LoginForm = () => {
             message: err.data.errors[field][0],
           });
         });
+      } else {
+        const errorMessage = err.data?.message || err.message || 'Invalid email or password.';
+        const displayMessage = errorMessage === 'Unauthenticated.' ? 'Invalid email or password.' : errorMessage;
+
+        methods.setError('email', { message: displayMessage });
+        methods.setError('password', { message: '__NO_DISPLAY__' });
       }
     }
   };
@@ -51,7 +57,13 @@ const LoginForm = () => {
         <div className="flex flex-col gap-6">
           {/* Email */}
           <div>
-            <RHFInput name="email" placeholder="Email" isRequired inputClassName="w-full px-3.5  py-2 rounded-lg" showRequiredIcon />
+            <RHFInput
+              name="email"
+              placeholder="Email"
+              isRequired
+              inputClassName="w-full px-3.5  py-2 rounded-lg"
+              showRequiredIcon
+            />
           </div>
 
           {/* Password */}

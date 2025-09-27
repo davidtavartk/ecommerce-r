@@ -194,8 +194,12 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
             </div>
           </div>
           {/* Button */}
-          <Button className={`py-4 ${cartLoading ? 'opacity-75' : ''}`} onClick={handleAddToCart} disabled={cartLoading}>
-            {cartLoading ? (
+          <Button
+            className={`py-4 ${cartLoading && isAuthenticated ? 'opacity-75' : ''}`}
+            onClick={handleAddToCart}
+            disabled={cartLoading && isAuthenticated}
+          >
+            {cartLoading && isAuthenticated ? (
               <>
                 <div className="h-6 w-6 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
                 <span className="text-lg font-medium">Adding...</span>

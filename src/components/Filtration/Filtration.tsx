@@ -27,7 +27,7 @@ const Filtration = ({
   return (
     <div className="flex items-center justify-between">
       <div className="relative pr-8">
-        Showing {from}-{to} of {total} results
+        Showing {from || 0}-{to || 0} of {total || 0} {total === 1 ? 'product' : 'products'}
         <div className="absolute top-1/2 right-0 h-[14px] w-px -translate-y-1/2 bg-[#E1DFE1]"></div>
       </div>
 

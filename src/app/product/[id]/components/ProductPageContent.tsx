@@ -46,6 +46,7 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
 
     try {
       await addToCart(product.id, quantity, selectedColor, selectedSize);
+      setQuantity(1);
       toast.success('Product added to cart successfully!');
     } catch (error: any) {
       const errorMessage = error?.data?.message || error?.message || 'Failed to add to cart. Please try again.';

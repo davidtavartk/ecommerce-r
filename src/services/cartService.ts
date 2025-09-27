@@ -15,11 +15,13 @@ export const cartService = {
       }),
     }),
 
-  updateCartItem: (productId: number, quantity: number) =>
+  updateCartItem: (productId: number, quantity: number, color: string, size: string) =>
     apiRequest<CartResponse>(`/cart/products/${productId}`, {
       method: 'PATCH',
       body: JSON.stringify({
         quantity,
+        color,
+        size,
       }),
     }),
 

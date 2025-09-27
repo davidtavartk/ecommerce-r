@@ -73,7 +73,7 @@ export const useCartStore = create<CartState>((set, get) => ({
         throw new Error('Cart item not found');
       }
 
-      await cartService.updateCartItem(cartItem.id, quantity);
+      await cartService.updateCartItem(cartItem.id, quantity, color, size);
     } catch (error) {
       set({
         items: currentItems,

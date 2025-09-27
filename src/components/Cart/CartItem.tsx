@@ -9,7 +9,7 @@ import { CartItemProps } from '@/types/propTypes';
 
 const CartItem = ({ product, onUpdateQuantity, onRemove }: CartItemProps) => {
   const [localQuantity, setLocalQuantity] = useState(product.quantity);
-  const debouncedQuantity = useDebounce(localQuantity, 200);
+  const debouncedQuantity = useDebounce(localQuantity, 150);
 
   useEffect(() => {
     if (debouncedQuantity !== product.quantity && onUpdateQuantity) {

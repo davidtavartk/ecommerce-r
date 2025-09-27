@@ -18,6 +18,7 @@ interface ProductPageContentProps {
 
 export default function ProductPageContent({ product }: ProductPageContentProps) {
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
+  const [imageLoading, setImageLoading] = useState<boolean>(false);
   const [selectedColor, setSelectedColor] = useState<string>(product.available_colors?.[0] || '');
   const [selectedSize, setSelectedSize] = useState<string>(product.available_sizes?.[0] || '');
   const [quantity, setQuantity] = useState<number>(1);
@@ -59,31 +60,45 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
         {/* Thumbnail Column */}
         <div className="flex flex-col gap-[9px]">
           {product.images.map((image, index) => (
-            <Image
-              key={index}
-              src={image}
-              alt={`Product Image ${index + 1}`}
-              width={121}
-              height={121}
-              className="cursor-pointer object-cover"
-              onClick={() => {
-                setSelectedImageIndex(index);
-                if (product.available_colors?.[index]) {
-                  setSelectedColor(product.available_colors[index]);
-                }
-              }}
-              style={{ width: 'auto', height: 'auto' }}
-            />
+            <div key={index} className="relative h-[121px] w-[121px]">
+              <div className="absolute inset-0 animate-pulse rounded bg-gray-200"></div>
+              <Image
+                key={index}
+                src={image}
+                alt={`Product Image ${index + 1}`}
+                width={121}
+                height={121}
+                className="size-[121px] cursor-pointer object-cover"
+                onClick={() => {
+                  if (index !== selectedImageIndex) {
+                    setImageLoading(true);
+                  }
+                  setSelectedImageIndex(index);
+                  if (product.available_colors?.[index]) {
+                    setSelectedColor(product.available_colors[index]);
+                  }
+                }}
+                onLoad={(e) => {
+                  e.currentTarget.previousElementSibling?.remove();
+                }}
+              />
+            </div>
           ))}
         </div>
         {/* Main Image */}
-        <div className="h-full w-full flex-1 rounded-[10px]">
+        <div className="relative h-full w-full flex-1 rounded-[10px]">
+          {imageLoading && (
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/50">
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-gray-300 border-t-orange-500"></div>
+            </div>
+          )}
           <Image
             src={product.images[selectedImageIndex] || product.cover_image}
             alt={product.name}
             width={412}
             height={549}
             className="size-full object-cover"
+            onLoad={() => setImageLoading(false)}
             priority
           />
         </div>
@@ -119,6 +134,9 @@ export default function ProductPageContent({ product }: ProductPageContentProps)
                           setSelectedColor(color);
                           const colorIndex = product.available_colors.indexOf(color);
                           if (colorIndex !== -1 && colorIndex < product.images.length) {
+                            if (colorIndex !== selectedImageIndex) {
+                              setImageLoading(true);
+                            }
                             setSelectedImageIndex(colorIndex);
                           }
                         }}
